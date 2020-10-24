@@ -1,0 +1,117 @@
+
+
+module {
+  func @main_graph(%arg0: tensor<1x3x224x224xf32>) -> tensor<1x1000xf32> attributes {input_names = ["data"], output_names = ["resnetv15_dense0_fwd"]} {
+    %cst = constant unit
+    %0 = "onnx.Constant"() : () -> tensor<64x3x7x7xf32>
+    %1 = "onnx.Constant"() : () -> tensor<64xf32>
+    %2 = "onnx.Pad"(%arg0, %cst, %cst) {constant_value = dense<0.000000e+00> : tensor<1xf32>, mode = "constant", pads = dense<[0, 0, 3, 3, 0, 0, 3, 3]> : tensor<8xi64>} : (tensor<1x3x224x224xf32>, none, none) -> tensor<1x3x230x230xf32>
+    %3 = "onnx.Conv"(%2, %0, %1) {auto_pad = "NOTSET", dilations = [1, 1], group = 1 : si64, kernel_shape = [7, 7], pads = [0, 0, 0, 0], strides = [2, 2]} : (tensor<1x3x230x230xf32>, tensor<64x3x7x7xf32>, tensor<64xf32>) -> tensor<1x64x112x112xf32>
+    %4 = "onnx.Relu"(%3) {onnx_node_name = "resnetv15_relu0_fwd"} : (tensor<1x64x112x112xf32>) -> tensor<1x64x112x112xf32>
+    %5 = "onnx.MaxPoolSingleOut"(%4) {auto_pad = "NOTSET", dilations = [1, 1], kernel_shape = [3, 3], onnx_node_name = "resnetv15_pool0_fwd", pads = [1, 1, 1, 1], strides = [2, 2]} : (tensor<1x64x112x112xf32>) -> tensor<1x64x56x56xf32>
+    %6 = "onnx.Constant"() : () -> tensor<64x64x3x3xf32>
+    %7 = "onnx.Constant"() : () -> tensor<64xf32>
+    %8 = "onnx.Pad"(%5, %cst, %cst) {constant_value = dense<0.000000e+00> : tensor<1xf32>, mode = "constant", pads = dense<[0, 0, 1, 1, 0, 0, 1, 1]> : tensor<8xi64>} : (tensor<1x64x56x56xf32>, none, none) -> tensor<1x64x58x58xf32>
+    %9 = "onnx.Conv"(%8, %6, %7) {auto_pad = "NOTSET", dilations = [1, 1], group = 1 : si64, kernel_shape = [3, 3], pads = [0, 0, 0, 0], strides = [1, 1]} : (tensor<1x64x58x58xf32>, tensor<64x64x3x3xf32>, tensor<64xf32>) -> tensor<1x64x56x56xf32>
+    %10 = "onnx.Relu"(%9) {onnx_node_name = "resnetv15_stage1_relu0_fwd"} : (tensor<1x64x56x56xf32>) -> tensor<1x64x56x56xf32>
+    %11 = "onnx.Constant"() : () -> tensor<64x64x3x3xf32>
+    %12 = "onnx.Constant"() : () -> tensor<64xf32>
+    %13 = "onnx.Pad"(%10, %cst, %cst) {constant_value = dense<0.000000e+00> : tensor<1xf32>, mode = "constant", pads = dense<[0, 0, 1, 1, 0, 0, 1, 1]> : tensor<8xi64>} : (tensor<1x64x56x56xf32>, none, none) -> tensor<1x64x58x58xf32>
+    %14 = "onnx.Conv"(%13, %11, %12) {auto_pad = "NOTSET", dilations = [1, 1], group = 1 : si64, kernel_shape = [3, 3], pads = [0, 0, 0, 0], strides = [1, 1]} : (tensor<1x64x58x58xf32>, tensor<64x64x3x3xf32>, tensor<64xf32>) -> tensor<1x64x56x56xf32>
+    %15 = "onnx.Add"(%5, %14) {onnx_node_name = "resnetv15_stage1__plus0"} : (tensor<1x64x56x56xf32>, tensor<1x64x56x56xf32>) -> tensor<1x64x56x56xf32>
+    %16 = "onnx.Relu"(%15) {onnx_node_name = "resnetv15_stage1_activation0"} : (tensor<1x64x56x56xf32>) -> tensor<1x64x56x56xf32>
+    %17 = "onnx.Constant"() : () -> tensor<64x64x3x3xf32>
+    %18 = "onnx.Constant"() : () -> tensor<64xf32>
+    %19 = "onnx.Pad"(%16, %cst, %cst) {constant_value = dense<0.000000e+00> : tensor<1xf32>, mode = "constant", pads = dense<[0, 0, 1, 1, 0, 0, 1, 1]> : tensor<8xi64>} : (tensor<1x64x56x56xf32>, none, none) -> tensor<1x64x58x58xf32>
+    %20 = "onnx.Conv"(%19, %17, %18) {auto_pad = "NOTSET", dilations = [1, 1], group = 1 : si64, kernel_shape = [3, 3], pads = [0, 0, 0, 0], strides = [1, 1]} : (tensor<1x64x58x58xf32>, tensor<64x64x3x3xf32>, tensor<64xf32>) -> tensor<1x64x56x56xf32>
+    %21 = "onnx.Relu"(%20) {onnx_node_name = "resnetv15_stage1_relu1_fwd"} : (tensor<1x64x56x56xf32>) -> tensor<1x64x56x56xf32>
+    %22 = "onnx.Constant"() : () -> tensor<64x64x3x3xf32>
+    %23 = "onnx.Constant"() : () -> tensor<64xf32>
+    %24 = "onnx.Pad"(%21, %cst, %cst) {constant_value = dense<0.000000e+00> : tensor<1xf32>, mode = "constant", pads = dense<[0, 0, 1, 1, 0, 0, 1, 1]> : tensor<8xi64>} : (tensor<1x64x56x56xf32>, none, none) -> tensor<1x64x58x58xf32>
+    %25 = "onnx.Conv"(%24, %22, %23) {auto_pad = "NOTSET", dilations = [1, 1], group = 1 : si64, kernel_shape = [3, 3], pads = [0, 0, 0, 0], strides = [1, 1]} : (tensor<1x64x58x58xf32>, tensor<64x64x3x3xf32>, tensor<64xf32>) -> tensor<1x64x56x56xf32>
+    %26 = "onnx.Add"(%16, %25) {onnx_node_name = "resnetv15_stage1__plus1"} : (tensor<1x64x56x56xf32>, tensor<1x64x56x56xf32>) -> tensor<1x64x56x56xf32>
+    %27 = "onnx.Relu"(%26) {onnx_node_name = "resnetv15_stage1_activation1"} : (tensor<1x64x56x56xf32>) -> tensor<1x64x56x56xf32>
+    %28 = "onnx.Constant"() : () -> tensor<128x64x1x1xf32>
+    %29 = "onnx.Constant"() : () -> tensor<128xf32>
+    %30 = "onnx.Conv"(%27, %28, %29) {auto_pad = "NOTSET", dilations = [1, 1], group = 1 : si64, kernel_shape = [1, 1], pads = [0, 0, 0, 0], strides = [2, 2]} : (tensor<1x64x56x56xf32>, tensor<128x64x1x1xf32>, tensor<128xf32>) -> tensor<1x128x28x28xf32>
+    %31 = "onnx.Constant"() : () -> tensor<128x64x3x3xf32>
+    %32 = "onnx.Constant"() : () -> tensor<128xf32>
+    %33 = "onnx.Pad"(%27, %cst, %cst) {constant_value = dense<0.000000e+00> : tensor<1xf32>, mode = "constant", pads = dense<[0, 0, 1, 1, 0, 0, 1, 1]> : tensor<8xi64>} : (tensor<1x64x56x56xf32>, none, none) -> tensor<1x64x58x58xf32>
+    %34 = "onnx.Conv"(%33, %31, %32) {auto_pad = "NOTSET", dilations = [1, 1], group = 1 : si64, kernel_shape = [3, 3], pads = [0, 0, 0, 0], strides = [2, 2]} : (tensor<1x64x58x58xf32>, tensor<128x64x3x3xf32>, tensor<128xf32>) -> tensor<1x128x28x28xf32>
+    %35 = "onnx.Relu"(%34) {onnx_node_name = "resnetv15_stage2_relu0_fwd"} : (tensor<1x128x28x28xf32>) -> tensor<1x128x28x28xf32>
+    %36 = "onnx.Constant"() : () -> tensor<128x128x3x3xf32>
+    %37 = "onnx.Constant"() : () -> tensor<128xf32>
+    %38 = "onnx.Pad"(%35, %cst, %cst) {constant_value = dense<0.000000e+00> : tensor<1xf32>, mode = "constant", pads = dense<[0, 0, 1, 1, 0, 0, 1, 1]> : tensor<8xi64>} : (tensor<1x128x28x28xf32>, none, none) -> tensor<1x128x30x30xf32>
+    %39 = "onnx.Conv"(%38, %36, %37) {auto_pad = "NOTSET", dilations = [1, 1], group = 1 : si64, kernel_shape = [3, 3], pads = [0, 0, 0, 0], strides = [1, 1]} : (tensor<1x128x30x30xf32>, tensor<128x128x3x3xf32>, tensor<128xf32>) -> tensor<1x128x28x28xf32>
+    %40 = "onnx.Add"(%30, %39) {onnx_node_name = "resnetv15_stage2__plus0"} : (tensor<1x128x28x28xf32>, tensor<1x128x28x28xf32>) -> tensor<1x128x28x28xf32>
+    %41 = "onnx.Relu"(%40) {onnx_node_name = "resnetv15_stage2_activation0"} : (tensor<1x128x28x28xf32>) -> tensor<1x128x28x28xf32>
+    %42 = "onnx.Constant"() : () -> tensor<128x128x3x3xf32>
+    %43 = "onnx.Constant"() : () -> tensor<128xf32>
+    %44 = "onnx.Pad"(%41, %cst, %cst) {constant_value = dense<0.000000e+00> : tensor<1xf32>, mode = "constant", pads = dense<[0, 0, 1, 1, 0, 0, 1, 1]> : tensor<8xi64>} : (tensor<1x128x28x28xf32>, none, none) -> tensor<1x128x30x30xf32>
+    %45 = "onnx.Conv"(%44, %42, %43) {auto_pad = "NOTSET", dilations = [1, 1], group = 1 : si64, kernel_shape = [3, 3], pads = [0, 0, 0, 0], strides = [1, 1]} : (tensor<1x128x30x30xf32>, tensor<128x128x3x3xf32>, tensor<128xf32>) -> tensor<1x128x28x28xf32>
+    %46 = "onnx.Relu"(%45) {onnx_node_name = "resnetv15_stage2_relu1_fwd"} : (tensor<1x128x28x28xf32>) -> tensor<1x128x28x28xf32>
+    %47 = "onnx.Constant"() : () -> tensor<128x128x3x3xf32>
+    %48 = "onnx.Constant"() : () -> tensor<128xf32>
+    %49 = "onnx.Pad"(%46, %cst, %cst) {constant_value = dense<0.000000e+00> : tensor<1xf32>, mode = "constant", pads = dense<[0, 0, 1, 1, 0, 0, 1, 1]> : tensor<8xi64>} : (tensor<1x128x28x28xf32>, none, none) -> tensor<1x128x30x30xf32>
+    %50 = "onnx.Conv"(%49, %47, %48) {auto_pad = "NOTSET", dilations = [1, 1], group = 1 : si64, kernel_shape = [3, 3], pads = [0, 0, 0, 0], strides = [1, 1]} : (tensor<1x128x30x30xf32>, tensor<128x128x3x3xf32>, tensor<128xf32>) -> tensor<1x128x28x28xf32>
+    %51 = "onnx.Add"(%41, %50) {onnx_node_name = "resnetv15_stage2__plus1"} : (tensor<1x128x28x28xf32>, tensor<1x128x28x28xf32>) -> tensor<1x128x28x28xf32>
+    %52 = "onnx.Relu"(%51) {onnx_node_name = "resnetv15_stage2_activation1"} : (tensor<1x128x28x28xf32>) -> tensor<1x128x28x28xf32>
+    %53 = "onnx.Constant"() : () -> tensor<256x128x1x1xf32>
+    %54 = "onnx.Constant"() : () -> tensor<256xf32>
+    %55 = "onnx.Conv"(%52, %53, %54) {auto_pad = "NOTSET", dilations = [1, 1], group = 1 : si64, kernel_shape = [1, 1], pads = [0, 0, 0, 0], strides = [2, 2]} : (tensor<1x128x28x28xf32>, tensor<256x128x1x1xf32>, tensor<256xf32>) -> tensor<1x256x14x14xf32>
+    %56 = "onnx.Constant"() : () -> tensor<256x128x3x3xf32>
+    %57 = "onnx.Constant"() : () -> tensor<256xf32>
+    %58 = "onnx.Pad"(%52, %cst, %cst) {constant_value = dense<0.000000e+00> : tensor<1xf32>, mode = "constant", pads = dense<[0, 0, 1, 1, 0, 0, 1, 1]> : tensor<8xi64>} : (tensor<1x128x28x28xf32>, none, none) -> tensor<1x128x30x30xf32>
+    %59 = "onnx.Conv"(%58, %56, %57) {auto_pad = "NOTSET", dilations = [1, 1], group = 1 : si64, kernel_shape = [3, 3], pads = [0, 0, 0, 0], strides = [2, 2]} : (tensor<1x128x30x30xf32>, tensor<256x128x3x3xf32>, tensor<256xf32>) -> tensor<1x256x14x14xf32>
+    %60 = "onnx.Relu"(%59) {onnx_node_name = "resnetv15_stage3_relu0_fwd"} : (tensor<1x256x14x14xf32>) -> tensor<1x256x14x14xf32>
+    %61 = "onnx.Constant"() : () -> tensor<256x256x3x3xf32>
+    %62 = "onnx.Constant"() : () -> tensor<256xf32>
+    %63 = "onnx.Pad"(%60, %cst, %cst) {constant_value = dense<0.000000e+00> : tensor<1xf32>, mode = "constant", pads = dense<[0, 0, 1, 1, 0, 0, 1, 1]> : tensor<8xi64>} : (tensor<1x256x14x14xf32>, none, none) -> tensor<1x256x16x16xf32>
+    %64 = "onnx.Conv"(%63, %61, %62) {auto_pad = "NOTSET", dilations = [1, 1], group = 1 : si64, kernel_shape = [3, 3], pads = [0, 0, 0, 0], strides = [1, 1]} : (tensor<1x256x16x16xf32>, tensor<256x256x3x3xf32>, tensor<256xf32>) -> tensor<1x256x14x14xf32>
+    %65 = "onnx.Add"(%55, %64) {onnx_node_name = "resnetv15_stage3__plus0"} : (tensor<1x256x14x14xf32>, tensor<1x256x14x14xf32>) -> tensor<1x256x14x14xf32>
+    %66 = "onnx.Relu"(%65) {onnx_node_name = "resnetv15_stage3_activation0"} : (tensor<1x256x14x14xf32>) -> tensor<1x256x14x14xf32>
+    %67 = "onnx.Constant"() : () -> tensor<256x256x3x3xf32>
+    %68 = "onnx.Constant"() : () -> tensor<256xf32>
+    %69 = "onnx.Pad"(%66, %cst, %cst) {constant_value = dense<0.000000e+00> : tensor<1xf32>, mode = "constant", pads = dense<[0, 0, 1, 1, 0, 0, 1, 1]> : tensor<8xi64>} : (tensor<1x256x14x14xf32>, none, none) -> tensor<1x256x16x16xf32>
+    %70 = "onnx.Conv"(%69, %67, %68) {auto_pad = "NOTSET", dilations = [1, 1], group = 1 : si64, kernel_shape = [3, 3], pads = [0, 0, 0, 0], strides = [1, 1]} : (tensor<1x256x16x16xf32>, tensor<256x256x3x3xf32>, tensor<256xf32>) -> tensor<1x256x14x14xf32>
+    %71 = "onnx.Relu"(%70) {onnx_node_name = "resnetv15_stage3_relu1_fwd"} : (tensor<1x256x14x14xf32>) -> tensor<1x256x14x14xf32>
+    %72 = "onnx.Constant"() : () -> tensor<256x256x3x3xf32>
+    %73 = "onnx.Constant"() : () -> tensor<256xf32>
+    %74 = "onnx.Pad"(%71, %cst, %cst) {constant_value = dense<0.000000e+00> : tensor<1xf32>, mode = "constant", pads = dense<[0, 0, 1, 1, 0, 0, 1, 1]> : tensor<8xi64>} : (tensor<1x256x14x14xf32>, none, none) -> tensor<1x256x16x16xf32>
+    %75 = "onnx.Conv"(%74, %72, %73) {auto_pad = "NOTSET", dilations = [1, 1], group = 1 : si64, kernel_shape = [3, 3], pads = [0, 0, 0, 0], strides = [1, 1]} : (tensor<1x256x16x16xf32>, tensor<256x256x3x3xf32>, tensor<256xf32>) -> tensor<1x256x14x14xf32>
+    %76 = "onnx.Add"(%66, %75) {onnx_node_name = "resnetv15_stage3__plus1"} : (tensor<1x256x14x14xf32>, tensor<1x256x14x14xf32>) -> tensor<1x256x14x14xf32>
+    %77 = "onnx.Relu"(%76) {onnx_node_name = "resnetv15_stage3_activation1"} : (tensor<1x256x14x14xf32>) -> tensor<1x256x14x14xf32>
+    %78 = "onnx.Constant"() : () -> tensor<512x256x1x1xf32>
+    %79 = "onnx.Constant"() : () -> tensor<512xf32>
+    %80 = "onnx.Conv"(%77, %78, %79) {auto_pad = "NOTSET", dilations = [1, 1], group = 1 : si64, kernel_shape = [1, 1], pads = [0, 0, 0, 0], strides = [2, 2]} : (tensor<1x256x14x14xf32>, tensor<512x256x1x1xf32>, tensor<512xf32>) -> tensor<1x512x7x7xf32>
+    %81 = "onnx.Constant"() : () -> tensor<512x256x3x3xf32>
+    %82 = "onnx.Constant"() : () -> tensor<512xf32>
+    %83 = "onnx.Pad"(%77, %cst, %cst) {constant_value = dense<0.000000e+00> : tensor<1xf32>, mode = "constant", pads = dense<[0, 0, 1, 1, 0, 0, 1, 1]> : tensor<8xi64>} : (tensor<1x256x14x14xf32>, none, none) -> tensor<1x256x16x16xf32>
+    %84 = "onnx.Conv"(%83, %81, %82) {auto_pad = "NOTSET", dilations = [1, 1], group = 1 : si64, kernel_shape = [3, 3], pads = [0, 0, 0, 0], strides = [2, 2]} : (tensor<1x256x16x16xf32>, tensor<512x256x3x3xf32>, tensor<512xf32>) -> tensor<1x512x7x7xf32>
+    %85 = "onnx.Relu"(%84) {onnx_node_name = "resnetv15_stage4_relu0_fwd"} : (tensor<1x512x7x7xf32>) -> tensor<1x512x7x7xf32>
+    %86 = "onnx.Constant"() : () -> tensor<512x512x3x3xf32>
+    %87 = "onnx.Constant"() : () -> tensor<512xf32>
+    %88 = "onnx.Pad"(%85, %cst, %cst) {constant_value = dense<0.000000e+00> : tensor<1xf32>, mode = "constant", pads = dense<[0, 0, 1, 1, 0, 0, 1, 1]> : tensor<8xi64>} : (tensor<1x512x7x7xf32>, none, none) -> tensor<1x512x9x9xf32>
+    %89 = "onnx.Conv"(%88, %86, %87) {auto_pad = "NOTSET", dilations = [1, 1], group = 1 : si64, kernel_shape = [3, 3], pads = [0, 0, 0, 0], strides = [1, 1]} : (tensor<1x512x9x9xf32>, tensor<512x512x3x3xf32>, tensor<512xf32>) -> tensor<1x512x7x7xf32>
+    %90 = "onnx.Add"(%80, %89) {onnx_node_name = "resnetv15_stage4__plus0"} : (tensor<1x512x7x7xf32>, tensor<1x512x7x7xf32>) -> tensor<1x512x7x7xf32>
+    %91 = "onnx.Relu"(%90) {onnx_node_name = "resnetv15_stage4_activation0"} : (tensor<1x512x7x7xf32>) -> tensor<1x512x7x7xf32>
+    %92 = "onnx.Constant"() : () -> tensor<512x512x3x3xf32>
+    %93 = "onnx.Constant"() : () -> tensor<512xf32>
+    %94 = "onnx.Pad"(%91, %cst, %cst) {constant_value = dense<0.000000e+00> : tensor<1xf32>, mode = "constant", pads = dense<[0, 0, 1, 1, 0, 0, 1, 1]> : tensor<8xi64>} : (tensor<1x512x7x7xf32>, none, none) -> tensor<1x512x9x9xf32>
+    %95 = "onnx.Conv"(%94, %92, %93) {auto_pad = "NOTSET", dilations = [1, 1], group = 1 : si64, kernel_shape = [3, 3], pads = [0, 0, 0, 0], strides = [1, 1]} : (tensor<1x512x9x9xf32>, tensor<512x512x3x3xf32>, tensor<512xf32>) -> tensor<1x512x7x7xf32>
+    %96 = "onnx.Relu"(%95) {onnx_node_name = "resnetv15_stage4_relu1_fwd"} : (tensor<1x512x7x7xf32>) -> tensor<1x512x7x7xf32>
+    %97 = "onnx.Constant"() : () -> tensor<512x512x3x3xf32>
+    %98 = "onnx.Constant"() : () -> tensor<512xf32>
+    %99 = "onnx.Pad"(%96, %cst, %cst) {constant_value = dense<0.000000e+00> : tensor<1xf32>, mode = "constant", pads = dense<[0, 0, 1, 1, 0, 0, 1, 1]> : tensor<8xi64>} : (tensor<1x512x7x7xf32>, none, none) -> tensor<1x512x9x9xf32>
+    %100 = "onnx.Conv"(%99, %97, %98) {auto_pad = "NOTSET", dilations = [1, 1], group = 1 : si64, kernel_shape = [3, 3], pads = [0, 0, 0, 0], strides = [1, 1]} : (tensor<1x512x9x9xf32>, tensor<512x512x3x3xf32>, tensor<512xf32>) -> tensor<1x512x7x7xf32>
+    %101 = "onnx.Add"(%91, %100) {onnx_node_name = "resnetv15_stage4__plus1"} : (tensor<1x512x7x7xf32>, tensor<1x512x7x7xf32>) -> tensor<1x512x7x7xf32>
+    %102 = "onnx.Relu"(%101) {onnx_node_name = "resnetv15_stage4_activation1"} : (tensor<1x512x7x7xf32>) -> tensor<1x512x7x7xf32>
+    %103 = "onnx.GlobalAveragePool"(%102) {onnx_node_name = "resnetv15_pool1_fwd"} : (tensor<1x512x7x7xf32>) -> tensor<1x512x1x1xf32>
+    %104 = "onnx.Flatten"(%103) {onnx_node_name = "flatten_170"} : (tensor<1x512x1x1xf32>) -> tensor<1x512xf32>
+    %105 = "onnx.Constant"() : () -> tensor<1000x512xf32>
+    %106 = "onnx.Constant"() : () -> tensor<1000xf32>
+    %107 = "onnx.Gemm"(%104, %105, %106) {alpha = 1.000000e+00 : f32, beta = 1.000000e+00 : f32, onnx_node_name = "resnetv15_dense0_fwd", transA = 0 : si64, transB = 1 : si64} : (tensor<1x512xf32>, tensor<1000x512xf32>, tensor<1000xf32>) -> tensor<1x1000xf32>
+    return %107 : tensor<1x1000xf32>
+  }
+  "onnx.EntryPoint"() {func = @main_graph, numInputs = 1 : i32, numOutputs = 1 : i32} : () -> ()
+}

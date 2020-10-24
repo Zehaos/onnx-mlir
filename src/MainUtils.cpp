@@ -418,18 +418,18 @@ void registerDialects(mlir::MLIRContext &context) {
 }
 
 void addONNXToMLIRPasses(mlir::PassManager &pm) {
-  pm.addPass(mlir::createDecomposeONNXToONNXPass());
-  pm.addPass(mlir::createConstPropONNXToONNXPass());
+  // pm.addPass(mlir::createDecomposeONNXToONNXPass());
+  // pm.addPass(mlir::createConstPropONNXToONNXPass());
   pm.addPass(mlir::createShapeInferencePass());
-  pm.addPass(mlir::createCanonicalizerPass());
-  pm.addPass(mlir::createAttributePromotionPass());
-  pm.addPass(mlir::createShapeInferencePass());
-  pm.addPass(mlir::createAttributePromotionPass());
-  // There are more opportunities for const propagation once all tensors have
-  // inferred shapes.
-  pm.addPass(mlir::createConstPropONNXToONNXPass());
-  // Clean dead code.
-  pm.addPass(mlir::createSymbolDCEPass());
+  // pm.addPass(mlir::createCanonicalizerPass());
+  // pm.addPass(mlir::createAttributePromotionPass());
+  // pm.addPass(mlir::createShapeInferencePass());
+  // pm.addPass(mlir::createAttributePromotionPass());
+  // // There are more opportunities for const propagation once all tensors have
+  // // inferred shapes.
+  // pm.addPass(mlir::createConstPropONNXToONNXPass());
+  // // Clean dead code.
+  // pm.addPass(mlir::createSymbolDCEPass());
 }
 
 void addONNXToKrnlPasses(mlir::PassManager &pm) {

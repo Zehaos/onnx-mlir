@@ -1354,6 +1354,7 @@ LogicalResult ONNXReshapeOp::inferShapes() {
     return emitError("Input data tensor not ranked");
 
   if (!shape().getType().isa<RankedTensorType>())
+    // auto elementType = dataType.cast<mlir::TensorType>().getElementType();
     return emitError("Shape tensor not ranked");
 
   auto inputTensorTy = data().getType().cast<RankedTensorType>();

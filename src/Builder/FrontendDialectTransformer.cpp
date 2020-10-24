@@ -23,6 +23,7 @@ namespace bstd = mpark;
 #include "src/Interface/ResultTypeInferenceOpInterface.hpp"
 
 #include "FrontendDialectTransformer.hpp"
+#include "onnx/shape_inference/implementation.h"
 
 namespace onnx_mlir {
 namespace detail {
@@ -316,6 +317,12 @@ private:
 
   template <typename T>
   void buildOperation(const onnx::NodeProto &node) {
+    if(node.has_name()){
+      // std::cout << node.name() << std::endl;
+      if(node.name().compare("mobilenetv20_output_flatten0_reshape0") == 0){
+        printf("is it \n");
+      }
+    }
     std::vector<mlir::Value> inputs;
     int expectedNumOperands = T::getNumberOfOperands();
     int expectedNumResults = T::getNumberOfResults();
@@ -361,6 +368,59 @@ private:
       // Training mode with four trailing optional outputs. Not handled yet.
       buildOperation<mlir::ONNXBatchNormalizationOp>(node);
     }
+  }
+
+  /*!
+   * Special handle for Reshape operations.
+   */
+  void ImportNodeReshape(const onnx::NodeProto &node) {
+    int expectedNumOperands = mlir::ONNXReshapeOp::getNumberOfOperands();
+    int expectedNumResults = mlir::ONNXReshapeOp::getNumberOfResults();
+    // if (expectedNumOperands != 2 || expectedNumResults != 1){
+    //   mlir::emitError("Reshape has invalid input or output number.");
+    // }
+
+    std::vector<mlir::Value> inputs;
+
+    for (const auto &item : node.input())
+      if (initializedTensors.ContainKey(legalize_name(item))) {
+        mlir::Value shapeT = initializedTensors.EmitInitializerForInputTensor(
+            UnknownLoc(), builder_, legalize_name(item));
+        if (shapeT.getType().isa<RankedTensorType>()){
+          printf("ranked=== \n");
+        }
+        else{
+          printf("unranked=== \n");
+        }
+        inputs.push_back(shapeT);
+      } else if (frontend_symbols_.ContainKey(legalize_name(item))) {
+        inputs.push_back(frontend_symbols_.GetTensorByOnnxName(item));
+      }
+    // buildOutputAndOperation<mlir::ONNXReshapeOp>(
+    //     node, inputs, expectedNumOperands, expectedNumResults);
+
+    std::vector<mlir::Type> outputTypes;
+
+    mlir::Type dataType = inputs[0].getType();
+    // auto elementType = dataType.cast<mlir::TensorType>().getElementType();
+    // auto outType = mlir::RankedTensorType::get(elementType);
+    outputTypes.push_back(dataType);
+
+    auto attributes = ImportNodeAttributes(node);
+    auto op = builder_.create<mlir::ONNXReshapeOp>(
+      UnknownLoc(), outputTypes, inputs, attributes);
+    if (!op.shape().getType().isa<RankedTensorType>()){
+      printf("not ranked now!");
+    }
+    if (auto opWithTypeInference =
+            mlir::dyn_cast<mlir::ResultTypeInferenceOpInterface>(
+                op.getOperation())) {
+      auto outTypes = opWithTypeInference.resultTypeInference();
+      (*op.getODSResults(0).begin()).setType(outTypes[0]);
+    }
+      frontend_symbols_.AddMapping(
+            legalize_name(node.output()[0]), *(op.getODSResults(0).begin()));
+
   }
 
   /*!
@@ -642,6 +702,13 @@ void ImportFrontendModelFile(std::string model_fname,
 
   auto parse_success = model.ParseFromIstream(&input);
   assert(parse_success && "Onnx Model Parsing Failed.");
+
+  // onnx::shape_inference::InferShapes(model);
+
+  // std::fstream output("tmp_onnx_infershape.onnx", std::ios::out | std::ios::trunc | std::ios::binary);
+  // std::string model_string;
+  // model.SerializeToString(&model_string);
+  // output << model_string;
 
   detail::FrontendGenImpl myONNXGen(context);
   module = myONNXGen.ImportONNXModel(model);

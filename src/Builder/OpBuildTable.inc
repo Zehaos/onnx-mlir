@@ -223,7 +223,8 @@ import_handler_map_["ReduceSumSquare"] =
 import_handler_map_["Relu"] = 
    &onnx_mlir::detail::FrontendGenImpl::buildOperation<mlir::ONNXReluOp>;
 import_handler_map_["Reshape"] = 
-   &onnx_mlir::detail::FrontendGenImpl::buildOperation<mlir::ONNXReshapeOp>;
+   &onnx_mlir::detail::FrontendGenImpl::ImportNodeReshape;
+   // &onnx_mlir::detail::FrontendGenImpl::buildOperation<mlir::ONNXReshapeOp>;
 import_handler_map_["Resize"] = 
    &onnx_mlir::detail::FrontendGenImpl::buildOperation<mlir::ONNXResizeOp>;
 import_handler_map_["ReverseSequence"] = 

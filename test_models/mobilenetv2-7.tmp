@@ -1,0 +1,431 @@
+
+
+module {
+  func @main_graph(%arg0: tensor<1x3x224x224xf32>) -> tensor<1x1000xf32> attributes {input_names = ["data"], output_names = ["mobilenetv20_output_flatten0_reshape0"]} {
+    %cst = constant unit
+    %0 = "onnx.Constant"() : () -> tensor<32x3x3x3xf32>
+    %1 = "onnx.Conv"(%arg0, %0, %cst) {auto_pad = "NOTSET", dilations = [1, 1], group = 1 : si64, kernel_shape = [3, 3], onnx_node_name = "mobilenetv20_features_conv0_fwd", pads = [1, 1, 1, 1], strides = [2, 2]} : (tensor<1x3x224x224xf32>, tensor<32x3x3x3xf32>, none) -> tensor<1x32x112x112xf32>
+    %2 = "onnx.Constant"() : () -> tensor<32xf32>
+    %3 = "onnx.Constant"() : () -> tensor<32xf32>
+    %4 = "onnx.Constant"() : () -> tensor<32xf32>
+    %5 = "onnx.Constant"() : () -> tensor<32xf32>
+    %6 = "onnx.BatchNormalizationTestMode"(%1, %2, %3, %4, %5) {epsilon = 9.99999974E-6 : f32, momentum = 0.899999976 : f32, onnx_node_name = "mobilenetv20_features_batchnorm0_fwd", spatial = 1 : si64} : (tensor<1x32x112x112xf32>, tensor<32xf32>, tensor<32xf32>, tensor<32xf32>, tensor<32xf32>) -> tensor<1x32x112x112xf32>
+    %7 = "onnx.Relu"(%6) {onnx_node_name = "mobilenetv20_features_relu0_fwd"} : (tensor<1x32x112x112xf32>) -> tensor<1x32x112x112xf32>
+    %8 = "onnx.Constant"() : () -> tensor<32x32x1x1xf32>
+    %9 = "onnx.Conv"(%7, %8, %cst) {auto_pad = "NOTSET", dilations = [1, 1], group = 1 : si64, kernel_shape = [1, 1], onnx_node_name = "mobilenetv20_features_linearbottleneck0_conv0_fwd", pads = [0, 0, 0, 0], strides = [1, 1]} : (tensor<1x32x112x112xf32>, tensor<32x32x1x1xf32>, none) -> tensor<1x32x112x112xf32>
+    %10 = "onnx.Constant"() : () -> tensor<32xf32>
+    %11 = "onnx.Constant"() : () -> tensor<32xf32>
+    %12 = "onnx.Constant"() : () -> tensor<32xf32>
+    %13 = "onnx.Constant"() : () -> tensor<32xf32>
+    %14 = "onnx.BatchNormalizationTestMode"(%9, %10, %11, %12, %13) {epsilon = 9.99999974E-6 : f32, momentum = 0.899999976 : f32, onnx_node_name = "mobilenetv20_features_linearbottleneck0_batchnorm0_fwd", spatial = 1 : si64} : (tensor<1x32x112x112xf32>, tensor<32xf32>, tensor<32xf32>, tensor<32xf32>, tensor<32xf32>) -> tensor<1x32x112x112xf32>
+    %15 = "onnx.Relu"(%14) {onnx_node_name = "mobilenetv20_features_linearbottleneck0_relu0_fwd"} : (tensor<1x32x112x112xf32>) -> tensor<1x32x112x112xf32>
+    %16 = "onnx.Constant"() : () -> tensor<32x1x3x3xf32>
+    %17 = "onnx.Conv"(%15, %16, %cst) {auto_pad = "NOTSET", dilations = [1, 1], group = 32 : si64, kernel_shape = [3, 3], onnx_node_name = "mobilenetv20_features_linearbottleneck0_conv1_fwd", pads = [1, 1, 1, 1], strides = [1, 1]} : (tensor<1x32x112x112xf32>, tensor<32x1x3x3xf32>, none) -> tensor<1x32x112x112xf32>
+    %18 = "onnx.Constant"() : () -> tensor<32xf32>
+    %19 = "onnx.Constant"() : () -> tensor<32xf32>
+    %20 = "onnx.Constant"() : () -> tensor<32xf32>
+    %21 = "onnx.Constant"() : () -> tensor<32xf32>
+    %22 = "onnx.BatchNormalizationTestMode"(%17, %18, %19, %20, %21) {epsilon = 9.99999974E-6 : f32, momentum = 0.899999976 : f32, onnx_node_name = "mobilenetv20_features_linearbottleneck0_batchnorm1_fwd", spatial = 1 : si64} : (tensor<1x32x112x112xf32>, tensor<32xf32>, tensor<32xf32>, tensor<32xf32>, tensor<32xf32>) -> tensor<1x32x112x112xf32>
+    %23 = "onnx.Relu"(%22) {onnx_node_name = "mobilenetv20_features_linearbottleneck0_relu1_fwd"} : (tensor<1x32x112x112xf32>) -> tensor<1x32x112x112xf32>
+    %24 = "onnx.Constant"() : () -> tensor<16x32x1x1xf32>
+    %25 = "onnx.Conv"(%23, %24, %cst) {auto_pad = "NOTSET", dilations = [1, 1], group = 1 : si64, kernel_shape = [1, 1], onnx_node_name = "mobilenetv20_features_linearbottleneck0_conv2_fwd", pads = [0, 0, 0, 0], strides = [1, 1]} : (tensor<1x32x112x112xf32>, tensor<16x32x1x1xf32>, none) -> tensor<1x16x112x112xf32>
+    %26 = "onnx.Constant"() : () -> tensor<16xf32>
+    %27 = "onnx.Constant"() : () -> tensor<16xf32>
+    %28 = "onnx.Constant"() : () -> tensor<16xf32>
+    %29 = "onnx.Constant"() : () -> tensor<16xf32>
+    %30 = "onnx.BatchNormalizationTestMode"(%25, %26, %27, %28, %29) {epsilon = 9.99999974E-6 : f32, momentum = 0.899999976 : f32, onnx_node_name = "mobilenetv20_features_linearbottleneck0_batchnorm2_fwd", spatial = 1 : si64} : (tensor<1x16x112x112xf32>, tensor<16xf32>, tensor<16xf32>, tensor<16xf32>, tensor<16xf32>) -> tensor<1x16x112x112xf32>
+    %31 = "onnx.Constant"() : () -> tensor<96x16x1x1xf32>
+    %32 = "onnx.Conv"(%30, %31, %cst) {auto_pad = "NOTSET", dilations = [1, 1], group = 1 : si64, kernel_shape = [1, 1], onnx_node_name = "mobilenetv20_features_linearbottleneck1_conv0_fwd", pads = [0, 0, 0, 0], strides = [1, 1]} : (tensor<1x16x112x112xf32>, tensor<96x16x1x1xf32>, none) -> tensor<1x96x112x112xf32>
+    %33 = "onnx.Constant"() : () -> tensor<96xf32>
+    %34 = "onnx.Constant"() : () -> tensor<96xf32>
+    %35 = "onnx.Constant"() : () -> tensor<96xf32>
+    %36 = "onnx.Constant"() : () -> tensor<96xf32>
+    %37 = "onnx.BatchNormalizationTestMode"(%32, %33, %34, %35, %36) {epsilon = 9.99999974E-6 : f32, momentum = 0.899999976 : f32, onnx_node_name = "mobilenetv20_features_linearbottleneck1_batchnorm0_fwd", spatial = 1 : si64} : (tensor<1x96x112x112xf32>, tensor<96xf32>, tensor<96xf32>, tensor<96xf32>, tensor<96xf32>) -> tensor<1x96x112x112xf32>
+    %38 = "onnx.Relu"(%37) {onnx_node_name = "mobilenetv20_features_linearbottleneck1_relu0_fwd"} : (tensor<1x96x112x112xf32>) -> tensor<1x96x112x112xf32>
+    %39 = "onnx.Constant"() : () -> tensor<96x1x3x3xf32>
+    %40 = "onnx.Conv"(%38, %39, %cst) {auto_pad = "NOTSET", dilations = [1, 1], group = 96 : si64, kernel_shape = [3, 3], onnx_node_name = "mobilenetv20_features_linearbottleneck1_conv1_fwd", pads = [1, 1, 1, 1], strides = [2, 2]} : (tensor<1x96x112x112xf32>, tensor<96x1x3x3xf32>, none) -> tensor<1x96x56x56xf32>
+    %41 = "onnx.Constant"() : () -> tensor<96xf32>
+    %42 = "onnx.Constant"() : () -> tensor<96xf32>
+    %43 = "onnx.Constant"() : () -> tensor<96xf32>
+    %44 = "onnx.Constant"() : () -> tensor<96xf32>
+    %45 = "onnx.BatchNormalizationTestMode"(%40, %41, %42, %43, %44) {epsilon = 9.99999974E-6 : f32, momentum = 0.899999976 : f32, onnx_node_name = "mobilenetv20_features_linearbottleneck1_batchnorm1_fwd", spatial = 1 : si64} : (tensor<1x96x56x56xf32>, tensor<96xf32>, tensor<96xf32>, tensor<96xf32>, tensor<96xf32>) -> tensor<1x96x56x56xf32>
+    %46 = "onnx.Relu"(%45) {onnx_node_name = "mobilenetv20_features_linearbottleneck1_relu1_fwd"} : (tensor<1x96x56x56xf32>) -> tensor<1x96x56x56xf32>
+    %47 = "onnx.Constant"() : () -> tensor<24x96x1x1xf32>
+    %48 = "onnx.Conv"(%46, %47, %cst) {auto_pad = "NOTSET", dilations = [1, 1], group = 1 : si64, kernel_shape = [1, 1], onnx_node_name = "mobilenetv20_features_linearbottleneck1_conv2_fwd", pads = [0, 0, 0, 0], strides = [1, 1]} : (tensor<1x96x56x56xf32>, tensor<24x96x1x1xf32>, none) -> tensor<1x24x56x56xf32>
+    %49 = "onnx.Constant"() : () -> tensor<24xf32>
+    %50 = "onnx.Constant"() : () -> tensor<24xf32>
+    %51 = "onnx.Constant"() : () -> tensor<24xf32>
+    %52 = "onnx.Constant"() : () -> tensor<24xf32>
+    %53 = "onnx.BatchNormalizationTestMode"(%48, %49, %50, %51, %52) {epsilon = 9.99999974E-6 : f32, momentum = 0.899999976 : f32, onnx_node_name = "mobilenetv20_features_linearbottleneck1_batchnorm2_fwd", spatial = 1 : si64} : (tensor<1x24x56x56xf32>, tensor<24xf32>, tensor<24xf32>, tensor<24xf32>, tensor<24xf32>) -> tensor<1x24x56x56xf32>
+    %54 = "onnx.Constant"() : () -> tensor<144x24x1x1xf32>
+    %55 = "onnx.Conv"(%53, %54, %cst) {auto_pad = "NOTSET", dilations = [1, 1], group = 1 : si64, kernel_shape = [1, 1], onnx_node_name = "mobilenetv20_features_linearbottleneck2_conv0_fwd", pads = [0, 0, 0, 0], strides = [1, 1]} : (tensor<1x24x56x56xf32>, tensor<144x24x1x1xf32>, none) -> tensor<1x144x56x56xf32>
+    %56 = "onnx.Constant"() : () -> tensor<144xf32>
+    %57 = "onnx.Constant"() : () -> tensor<144xf32>
+    %58 = "onnx.Constant"() : () -> tensor<144xf32>
+    %59 = "onnx.Constant"() : () -> tensor<144xf32>
+    %60 = "onnx.BatchNormalizationTestMode"(%55, %56, %57, %58, %59) {epsilon = 9.99999974E-6 : f32, momentum = 0.899999976 : f32, onnx_node_name = "mobilenetv20_features_linearbottleneck2_batchnorm0_fwd", spatial = 1 : si64} : (tensor<1x144x56x56xf32>, tensor<144xf32>, tensor<144xf32>, tensor<144xf32>, tensor<144xf32>) -> tensor<1x144x56x56xf32>
+    %61 = "onnx.Relu"(%60) {onnx_node_name = "mobilenetv20_features_linearbottleneck2_relu0_fwd"} : (tensor<1x144x56x56xf32>) -> tensor<1x144x56x56xf32>
+    %62 = "onnx.Constant"() : () -> tensor<144x1x3x3xf32>
+    %63 = "onnx.Conv"(%61, %62, %cst) {auto_pad = "NOTSET", dilations = [1, 1], group = 144 : si64, kernel_shape = [3, 3], onnx_node_name = "mobilenetv20_features_linearbottleneck2_conv1_fwd", pads = [1, 1, 1, 1], strides = [1, 1]} : (tensor<1x144x56x56xf32>, tensor<144x1x3x3xf32>, none) -> tensor<1x144x56x56xf32>
+    %64 = "onnx.Constant"() : () -> tensor<144xf32>
+    %65 = "onnx.Constant"() : () -> tensor<144xf32>
+    %66 = "onnx.Constant"() : () -> tensor<144xf32>
+    %67 = "onnx.Constant"() : () -> tensor<144xf32>
+    %68 = "onnx.BatchNormalizationTestMode"(%63, %64, %65, %66, %67) {epsilon = 9.99999974E-6 : f32, momentum = 0.899999976 : f32, onnx_node_name = "mobilenetv20_features_linearbottleneck2_batchnorm1_fwd", spatial = 1 : si64} : (tensor<1x144x56x56xf32>, tensor<144xf32>, tensor<144xf32>, tensor<144xf32>, tensor<144xf32>) -> tensor<1x144x56x56xf32>
+    %69 = "onnx.Relu"(%68) {onnx_node_name = "mobilenetv20_features_linearbottleneck2_relu1_fwd"} : (tensor<1x144x56x56xf32>) -> tensor<1x144x56x56xf32>
+    %70 = "onnx.Constant"() : () -> tensor<24x144x1x1xf32>
+    %71 = "onnx.Conv"(%69, %70, %cst) {auto_pad = "NOTSET", dilations = [1, 1], group = 1 : si64, kernel_shape = [1, 1], onnx_node_name = "mobilenetv20_features_linearbottleneck2_conv2_fwd", pads = [0, 0, 0, 0], strides = [1, 1]} : (tensor<1x144x56x56xf32>, tensor<24x144x1x1xf32>, none) -> tensor<1x24x56x56xf32>
+    %72 = "onnx.Constant"() : () -> tensor<24xf32>
+    %73 = "onnx.Constant"() : () -> tensor<24xf32>
+    %74 = "onnx.Constant"() : () -> tensor<24xf32>
+    %75 = "onnx.Constant"() : () -> tensor<24xf32>
+    %76 = "onnx.BatchNormalizationTestMode"(%71, %72, %73, %74, %75) {epsilon = 9.99999974E-6 : f32, momentum = 0.899999976 : f32, onnx_node_name = "mobilenetv20_features_linearbottleneck2_batchnorm2_fwd", spatial = 1 : si64} : (tensor<1x24x56x56xf32>, tensor<24xf32>, tensor<24xf32>, tensor<24xf32>, tensor<24xf32>) -> tensor<1x24x56x56xf32>
+    %77 = "onnx.Add"(%76, %53) {onnx_node_name = "mobilenetv20_features_linearbottleneck2_elemwise_add0"} : (tensor<1x24x56x56xf32>, tensor<1x24x56x56xf32>) -> tensor<1x24x56x56xf32>
+    %78 = "onnx.Constant"() : () -> tensor<144x24x1x1xf32>
+    %79 = "onnx.Conv"(%77, %78, %cst) {auto_pad = "NOTSET", dilations = [1, 1], group = 1 : si64, kernel_shape = [1, 1], onnx_node_name = "mobilenetv20_features_linearbottleneck3_conv0_fwd", pads = [0, 0, 0, 0], strides = [1, 1]} : (tensor<1x24x56x56xf32>, tensor<144x24x1x1xf32>, none) -> tensor<1x144x56x56xf32>
+    %80 = "onnx.Constant"() : () -> tensor<144xf32>
+    %81 = "onnx.Constant"() : () -> tensor<144xf32>
+    %82 = "onnx.Constant"() : () -> tensor<144xf32>
+    %83 = "onnx.Constant"() : () -> tensor<144xf32>
+    %84 = "onnx.BatchNormalizationTestMode"(%79, %80, %81, %82, %83) {epsilon = 9.99999974E-6 : f32, momentum = 0.899999976 : f32, onnx_node_name = "mobilenetv20_features_linearbottleneck3_batchnorm0_fwd", spatial = 1 : si64} : (tensor<1x144x56x56xf32>, tensor<144xf32>, tensor<144xf32>, tensor<144xf32>, tensor<144xf32>) -> tensor<1x144x56x56xf32>
+    %85 = "onnx.Relu"(%84) {onnx_node_name = "mobilenetv20_features_linearbottleneck3_relu0_fwd"} : (tensor<1x144x56x56xf32>) -> tensor<1x144x56x56xf32>
+    %86 = "onnx.Constant"() : () -> tensor<144x1x3x3xf32>
+    %87 = "onnx.Conv"(%85, %86, %cst) {auto_pad = "NOTSET", dilations = [1, 1], group = 144 : si64, kernel_shape = [3, 3], onnx_node_name = "mobilenetv20_features_linearbottleneck3_conv1_fwd", pads = [1, 1, 1, 1], strides = [2, 2]} : (tensor<1x144x56x56xf32>, tensor<144x1x3x3xf32>, none) -> tensor<1x144x28x28xf32>
+    %88 = "onnx.Constant"() : () -> tensor<144xf32>
+    %89 = "onnx.Constant"() : () -> tensor<144xf32>
+    %90 = "onnx.Constant"() : () -> tensor<144xf32>
+    %91 = "onnx.Constant"() : () -> tensor<144xf32>
+    %92 = "onnx.BatchNormalizationTestMode"(%87, %88, %89, %90, %91) {epsilon = 9.99999974E-6 : f32, momentum = 0.899999976 : f32, onnx_node_name = "mobilenetv20_features_linearbottleneck3_batchnorm1_fwd", spatial = 1 : si64} : (tensor<1x144x28x28xf32>, tensor<144xf32>, tensor<144xf32>, tensor<144xf32>, tensor<144xf32>) -> tensor<1x144x28x28xf32>
+    %93 = "onnx.Relu"(%92) {onnx_node_name = "mobilenetv20_features_linearbottleneck3_relu1_fwd"} : (tensor<1x144x28x28xf32>) -> tensor<1x144x28x28xf32>
+    %94 = "onnx.Constant"() : () -> tensor<32x144x1x1xf32>
+    %95 = "onnx.Conv"(%93, %94, %cst) {auto_pad = "NOTSET", dilations = [1, 1], group = 1 : si64, kernel_shape = [1, 1], onnx_node_name = "mobilenetv20_features_linearbottleneck3_conv2_fwd", pads = [0, 0, 0, 0], strides = [1, 1]} : (tensor<1x144x28x28xf32>, tensor<32x144x1x1xf32>, none) -> tensor<1x32x28x28xf32>
+    %96 = "onnx.Constant"() : () -> tensor<32xf32>
+    %97 = "onnx.Constant"() : () -> tensor<32xf32>
+    %98 = "onnx.Constant"() : () -> tensor<32xf32>
+    %99 = "onnx.Constant"() : () -> tensor<32xf32>
+    %100 = "onnx.BatchNormalizationTestMode"(%95, %96, %97, %98, %99) {epsilon = 9.99999974E-6 : f32, momentum = 0.899999976 : f32, onnx_node_name = "mobilenetv20_features_linearbottleneck3_batchnorm2_fwd", spatial = 1 : si64} : (tensor<1x32x28x28xf32>, tensor<32xf32>, tensor<32xf32>, tensor<32xf32>, tensor<32xf32>) -> tensor<1x32x28x28xf32>
+    %101 = "onnx.Constant"() : () -> tensor<192x32x1x1xf32>
+    %102 = "onnx.Conv"(%100, %101, %cst) {auto_pad = "NOTSET", dilations = [1, 1], group = 1 : si64, kernel_shape = [1, 1], onnx_node_name = "mobilenetv20_features_linearbottleneck4_conv0_fwd", pads = [0, 0, 0, 0], strides = [1, 1]} : (tensor<1x32x28x28xf32>, tensor<192x32x1x1xf32>, none) -> tensor<1x192x28x28xf32>
+    %103 = "onnx.Constant"() : () -> tensor<192xf32>
+    %104 = "onnx.Constant"() : () -> tensor<192xf32>
+    %105 = "onnx.Constant"() : () -> tensor<192xf32>
+    %106 = "onnx.Constant"() : () -> tensor<192xf32>
+    %107 = "onnx.BatchNormalizationTestMode"(%102, %103, %104, %105, %106) {epsilon = 9.99999974E-6 : f32, momentum = 0.899999976 : f32, onnx_node_name = "mobilenetv20_features_linearbottleneck4_batchnorm0_fwd", spatial = 1 : si64} : (tensor<1x192x28x28xf32>, tensor<192xf32>, tensor<192xf32>, tensor<192xf32>, tensor<192xf32>) -> tensor<1x192x28x28xf32>
+    %108 = "onnx.Relu"(%107) {onnx_node_name = "mobilenetv20_features_linearbottleneck4_relu0_fwd"} : (tensor<1x192x28x28xf32>) -> tensor<1x192x28x28xf32>
+    %109 = "onnx.Constant"() : () -> tensor<192x1x3x3xf32>
+    %110 = "onnx.Conv"(%108, %109, %cst) {auto_pad = "NOTSET", dilations = [1, 1], group = 192 : si64, kernel_shape = [3, 3], onnx_node_name = "mobilenetv20_features_linearbottleneck4_conv1_fwd", pads = [1, 1, 1, 1], strides = [1, 1]} : (tensor<1x192x28x28xf32>, tensor<192x1x3x3xf32>, none) -> tensor<1x192x28x28xf32>
+    %111 = "onnx.Constant"() : () -> tensor<192xf32>
+    %112 = "onnx.Constant"() : () -> tensor<192xf32>
+    %113 = "onnx.Constant"() : () -> tensor<192xf32>
+    %114 = "onnx.Constant"() : () -> tensor<192xf32>
+    %115 = "onnx.BatchNormalizationTestMode"(%110, %111, %112, %113, %114) {epsilon = 9.99999974E-6 : f32, momentum = 0.899999976 : f32, onnx_node_name = "mobilenetv20_features_linearbottleneck4_batchnorm1_fwd", spatial = 1 : si64} : (tensor<1x192x28x28xf32>, tensor<192xf32>, tensor<192xf32>, tensor<192xf32>, tensor<192xf32>) -> tensor<1x192x28x28xf32>
+    %116 = "onnx.Relu"(%115) {onnx_node_name = "mobilenetv20_features_linearbottleneck4_relu1_fwd"} : (tensor<1x192x28x28xf32>) -> tensor<1x192x28x28xf32>
+    %117 = "onnx.Constant"() : () -> tensor<32x192x1x1xf32>
+    %118 = "onnx.Conv"(%116, %117, %cst) {auto_pad = "NOTSET", dilations = [1, 1], group = 1 : si64, kernel_shape = [1, 1], onnx_node_name = "mobilenetv20_features_linearbottleneck4_conv2_fwd", pads = [0, 0, 0, 0], strides = [1, 1]} : (tensor<1x192x28x28xf32>, tensor<32x192x1x1xf32>, none) -> tensor<1x32x28x28xf32>
+    %119 = "onnx.Constant"() : () -> tensor<32xf32>
+    %120 = "onnx.Constant"() : () -> tensor<32xf32>
+    %121 = "onnx.Constant"() : () -> tensor<32xf32>
+    %122 = "onnx.Constant"() : () -> tensor<32xf32>
+    %123 = "onnx.BatchNormalizationTestMode"(%118, %119, %120, %121, %122) {epsilon = 9.99999974E-6 : f32, momentum = 0.899999976 : f32, onnx_node_name = "mobilenetv20_features_linearbottleneck4_batchnorm2_fwd", spatial = 1 : si64} : (tensor<1x32x28x28xf32>, tensor<32xf32>, tensor<32xf32>, tensor<32xf32>, tensor<32xf32>) -> tensor<1x32x28x28xf32>
+    %124 = "onnx.Add"(%123, %100) {onnx_node_name = "mobilenetv20_features_linearbottleneck4_elemwise_add0"} : (tensor<1x32x28x28xf32>, tensor<1x32x28x28xf32>) -> tensor<1x32x28x28xf32>
+    %125 = "onnx.Constant"() : () -> tensor<192x32x1x1xf32>
+    %126 = "onnx.Conv"(%124, %125, %cst) {auto_pad = "NOTSET", dilations = [1, 1], group = 1 : si64, kernel_shape = [1, 1], onnx_node_name = "mobilenetv20_features_linearbottleneck5_conv0_fwd", pads = [0, 0, 0, 0], strides = [1, 1]} : (tensor<1x32x28x28xf32>, tensor<192x32x1x1xf32>, none) -> tensor<1x192x28x28xf32>
+    %127 = "onnx.Constant"() : () -> tensor<192xf32>
+    %128 = "onnx.Constant"() : () -> tensor<192xf32>
+    %129 = "onnx.Constant"() : () -> tensor<192xf32>
+    %130 = "onnx.Constant"() : () -> tensor<192xf32>
+    %131 = "onnx.BatchNormalizationTestMode"(%126, %127, %128, %129, %130) {epsilon = 9.99999974E-6 : f32, momentum = 0.899999976 : f32, onnx_node_name = "mobilenetv20_features_linearbottleneck5_batchnorm0_fwd", spatial = 1 : si64} : (tensor<1x192x28x28xf32>, tensor<192xf32>, tensor<192xf32>, tensor<192xf32>, tensor<192xf32>) -> tensor<1x192x28x28xf32>
+    %132 = "onnx.Relu"(%131) {onnx_node_name = "mobilenetv20_features_linearbottleneck5_relu0_fwd"} : (tensor<1x192x28x28xf32>) -> tensor<1x192x28x28xf32>
+    %133 = "onnx.Constant"() : () -> tensor<192x1x3x3xf32>
+    %134 = "onnx.Conv"(%132, %133, %cst) {auto_pad = "NOTSET", dilations = [1, 1], group = 192 : si64, kernel_shape = [3, 3], onnx_node_name = "mobilenetv20_features_linearbottleneck5_conv1_fwd", pads = [1, 1, 1, 1], strides = [1, 1]} : (tensor<1x192x28x28xf32>, tensor<192x1x3x3xf32>, none) -> tensor<1x192x28x28xf32>
+    %135 = "onnx.Constant"() : () -> tensor<192xf32>
+    %136 = "onnx.Constant"() : () -> tensor<192xf32>
+    %137 = "onnx.Constant"() : () -> tensor<192xf32>
+    %138 = "onnx.Constant"() : () -> tensor<192xf32>
+    %139 = "onnx.BatchNormalizationTestMode"(%134, %135, %136, %137, %138) {epsilon = 9.99999974E-6 : f32, momentum = 0.899999976 : f32, onnx_node_name = "mobilenetv20_features_linearbottleneck5_batchnorm1_fwd", spatial = 1 : si64} : (tensor<1x192x28x28xf32>, tensor<192xf32>, tensor<192xf32>, tensor<192xf32>, tensor<192xf32>) -> tensor<1x192x28x28xf32>
+    %140 = "onnx.Relu"(%139) {onnx_node_name = "mobilenetv20_features_linearbottleneck5_relu1_fwd"} : (tensor<1x192x28x28xf32>) -> tensor<1x192x28x28xf32>
+    %141 = "onnx.Constant"() : () -> tensor<32x192x1x1xf32>
+    %142 = "onnx.Conv"(%140, %141, %cst) {auto_pad = "NOTSET", dilations = [1, 1], group = 1 : si64, kernel_shape = [1, 1], onnx_node_name = "mobilenetv20_features_linearbottleneck5_conv2_fwd", pads = [0, 0, 0, 0], strides = [1, 1]} : (tensor<1x192x28x28xf32>, tensor<32x192x1x1xf32>, none) -> tensor<1x32x28x28xf32>
+    %143 = "onnx.Constant"() : () -> tensor<32xf32>
+    %144 = "onnx.Constant"() : () -> tensor<32xf32>
+    %145 = "onnx.Constant"() : () -> tensor<32xf32>
+    %146 = "onnx.Constant"() : () -> tensor<32xf32>
+    %147 = "onnx.BatchNormalizationTestMode"(%142, %143, %144, %145, %146) {epsilon = 9.99999974E-6 : f32, momentum = 0.899999976 : f32, onnx_node_name = "mobilenetv20_features_linearbottleneck5_batchnorm2_fwd", spatial = 1 : si64} : (tensor<1x32x28x28xf32>, tensor<32xf32>, tensor<32xf32>, tensor<32xf32>, tensor<32xf32>) -> tensor<1x32x28x28xf32>
+    %148 = "onnx.Add"(%147, %124) {onnx_node_name = "mobilenetv20_features_linearbottleneck5_elemwise_add0"} : (tensor<1x32x28x28xf32>, tensor<1x32x28x28xf32>) -> tensor<1x32x28x28xf32>
+    %149 = "onnx.Constant"() : () -> tensor<192x32x1x1xf32>
+    %150 = "onnx.Conv"(%148, %149, %cst) {auto_pad = "NOTSET", dilations = [1, 1], group = 1 : si64, kernel_shape = [1, 1], onnx_node_name = "mobilenetv20_features_linearbottleneck6_conv0_fwd", pads = [0, 0, 0, 0], strides = [1, 1]} : (tensor<1x32x28x28xf32>, tensor<192x32x1x1xf32>, none) -> tensor<1x192x28x28xf32>
+    %151 = "onnx.Constant"() : () -> tensor<192xf32>
+    %152 = "onnx.Constant"() : () -> tensor<192xf32>
+    %153 = "onnx.Constant"() : () -> tensor<192xf32>
+    %154 = "onnx.Constant"() : () -> tensor<192xf32>
+    %155 = "onnx.BatchNormalizationTestMode"(%150, %151, %152, %153, %154) {epsilon = 9.99999974E-6 : f32, momentum = 0.899999976 : f32, onnx_node_name = "mobilenetv20_features_linearbottleneck6_batchnorm0_fwd", spatial = 1 : si64} : (tensor<1x192x28x28xf32>, tensor<192xf32>, tensor<192xf32>, tensor<192xf32>, tensor<192xf32>) -> tensor<1x192x28x28xf32>
+    %156 = "onnx.Relu"(%155) {onnx_node_name = "mobilenetv20_features_linearbottleneck6_relu0_fwd"} : (tensor<1x192x28x28xf32>) -> tensor<1x192x28x28xf32>
+    %157 = "onnx.Constant"() : () -> tensor<192x1x3x3xf32>
+    %158 = "onnx.Conv"(%156, %157, %cst) {auto_pad = "NOTSET", dilations = [1, 1], group = 192 : si64, kernel_shape = [3, 3], onnx_node_name = "mobilenetv20_features_linearbottleneck6_conv1_fwd", pads = [1, 1, 1, 1], strides = [1, 1]} : (tensor<1x192x28x28xf32>, tensor<192x1x3x3xf32>, none) -> tensor<1x192x28x28xf32>
+    %159 = "onnx.Constant"() : () -> tensor<192xf32>
+    %160 = "onnx.Constant"() : () -> tensor<192xf32>
+    %161 = "onnx.Constant"() : () -> tensor<192xf32>
+    %162 = "onnx.Constant"() : () -> tensor<192xf32>
+    %163 = "onnx.BatchNormalizationTestMode"(%158, %159, %160, %161, %162) {epsilon = 9.99999974E-6 : f32, momentum = 0.899999976 : f32, onnx_node_name = "mobilenetv20_features_linearbottleneck6_batchnorm1_fwd", spatial = 1 : si64} : (tensor<1x192x28x28xf32>, tensor<192xf32>, tensor<192xf32>, tensor<192xf32>, tensor<192xf32>) -> tensor<1x192x28x28xf32>
+    %164 = "onnx.Relu"(%163) {onnx_node_name = "mobilenetv20_features_linearbottleneck6_relu1_fwd"} : (tensor<1x192x28x28xf32>) -> tensor<1x192x28x28xf32>
+    %165 = "onnx.Constant"() : () -> tensor<64x192x1x1xf32>
+    %166 = "onnx.Conv"(%164, %165, %cst) {auto_pad = "NOTSET", dilations = [1, 1], group = 1 : si64, kernel_shape = [1, 1], onnx_node_name = "mobilenetv20_features_linearbottleneck6_conv2_fwd", pads = [0, 0, 0, 0], strides = [1, 1]} : (tensor<1x192x28x28xf32>, tensor<64x192x1x1xf32>, none) -> tensor<1x64x28x28xf32>
+    %167 = "onnx.Constant"() : () -> tensor<64xf32>
+    %168 = "onnx.Constant"() : () -> tensor<64xf32>
+    %169 = "onnx.Constant"() : () -> tensor<64xf32>
+    %170 = "onnx.Constant"() : () -> tensor<64xf32>
+    %171 = "onnx.BatchNormalizationTestMode"(%166, %167, %168, %169, %170) {epsilon = 9.99999974E-6 : f32, momentum = 0.899999976 : f32, onnx_node_name = "mobilenetv20_features_linearbottleneck6_batchnorm2_fwd", spatial = 1 : si64} : (tensor<1x64x28x28xf32>, tensor<64xf32>, tensor<64xf32>, tensor<64xf32>, tensor<64xf32>) -> tensor<1x64x28x28xf32>
+    %172 = "onnx.Constant"() : () -> tensor<384x64x1x1xf32>
+    %173 = "onnx.Conv"(%171, %172, %cst) {auto_pad = "NOTSET", dilations = [1, 1], group = 1 : si64, kernel_shape = [1, 1], onnx_node_name = "mobilenetv20_features_linearbottleneck7_conv0_fwd", pads = [0, 0, 0, 0], strides = [1, 1]} : (tensor<1x64x28x28xf32>, tensor<384x64x1x1xf32>, none) -> tensor<1x384x28x28xf32>
+    %174 = "onnx.Constant"() : () -> tensor<384xf32>
+    %175 = "onnx.Constant"() : () -> tensor<384xf32>
+    %176 = "onnx.Constant"() : () -> tensor<384xf32>
+    %177 = "onnx.Constant"() : () -> tensor<384xf32>
+    %178 = "onnx.BatchNormalizationTestMode"(%173, %174, %175, %176, %177) {epsilon = 9.99999974E-6 : f32, momentum = 0.899999976 : f32, onnx_node_name = "mobilenetv20_features_linearbottleneck7_batchnorm0_fwd", spatial = 1 : si64} : (tensor<1x384x28x28xf32>, tensor<384xf32>, tensor<384xf32>, tensor<384xf32>, tensor<384xf32>) -> tensor<1x384x28x28xf32>
+    %179 = "onnx.Relu"(%178) {onnx_node_name = "mobilenetv20_features_linearbottleneck7_relu0_fwd"} : (tensor<1x384x28x28xf32>) -> tensor<1x384x28x28xf32>
+    %180 = "onnx.Constant"() : () -> tensor<384x1x3x3xf32>
+    %181 = "onnx.Conv"(%179, %180, %cst) {auto_pad = "NOTSET", dilations = [1, 1], group = 384 : si64, kernel_shape = [3, 3], onnx_node_name = "mobilenetv20_features_linearbottleneck7_conv1_fwd", pads = [1, 1, 1, 1], strides = [1, 1]} : (tensor<1x384x28x28xf32>, tensor<384x1x3x3xf32>, none) -> tensor<1x384x28x28xf32>
+    %182 = "onnx.Constant"() : () -> tensor<384xf32>
+    %183 = "onnx.Constant"() : () -> tensor<384xf32>
+    %184 = "onnx.Constant"() : () -> tensor<384xf32>
+    %185 = "onnx.Constant"() : () -> tensor<384xf32>
+    %186 = "onnx.BatchNormalizationTestMode"(%181, %182, %183, %184, %185) {epsilon = 9.99999974E-6 : f32, momentum = 0.899999976 : f32, onnx_node_name = "mobilenetv20_features_linearbottleneck7_batchnorm1_fwd", spatial = 1 : si64} : (tensor<1x384x28x28xf32>, tensor<384xf32>, tensor<384xf32>, tensor<384xf32>, tensor<384xf32>) -> tensor<1x384x28x28xf32>
+    %187 = "onnx.Relu"(%186) {onnx_node_name = "mobilenetv20_features_linearbottleneck7_relu1_fwd"} : (tensor<1x384x28x28xf32>) -> tensor<1x384x28x28xf32>
+    %188 = "onnx.Constant"() : () -> tensor<64x384x1x1xf32>
+    %189 = "onnx.Conv"(%187, %188, %cst) {auto_pad = "NOTSET", dilations = [1, 1], group = 1 : si64, kernel_shape = [1, 1], onnx_node_name = "mobilenetv20_features_linearbottleneck7_conv2_fwd", pads = [0, 0, 0, 0], strides = [1, 1]} : (tensor<1x384x28x28xf32>, tensor<64x384x1x1xf32>, none) -> tensor<1x64x28x28xf32>
+    %190 = "onnx.Constant"() : () -> tensor<64xf32>
+    %191 = "onnx.Constant"() : () -> tensor<64xf32>
+    %192 = "onnx.Constant"() : () -> tensor<64xf32>
+    %193 = "onnx.Constant"() : () -> tensor<64xf32>
+    %194 = "onnx.BatchNormalizationTestMode"(%189, %190, %191, %192, %193) {epsilon = 9.99999974E-6 : f32, momentum = 0.899999976 : f32, onnx_node_name = "mobilenetv20_features_linearbottleneck7_batchnorm2_fwd", spatial = 1 : si64} : (tensor<1x64x28x28xf32>, tensor<64xf32>, tensor<64xf32>, tensor<64xf32>, tensor<64xf32>) -> tensor<1x64x28x28xf32>
+    %195 = "onnx.Add"(%194, %171) {onnx_node_name = "mobilenetv20_features_linearbottleneck7_elemwise_add0"} : (tensor<1x64x28x28xf32>, tensor<1x64x28x28xf32>) -> tensor<1x64x28x28xf32>
+    %196 = "onnx.Constant"() : () -> tensor<384x64x1x1xf32>
+    %197 = "onnx.Conv"(%195, %196, %cst) {auto_pad = "NOTSET", dilations = [1, 1], group = 1 : si64, kernel_shape = [1, 1], onnx_node_name = "mobilenetv20_features_linearbottleneck8_conv0_fwd", pads = [0, 0, 0, 0], strides = [1, 1]} : (tensor<1x64x28x28xf32>, tensor<384x64x1x1xf32>, none) -> tensor<1x384x28x28xf32>
+    %198 = "onnx.Constant"() : () -> tensor<384xf32>
+    %199 = "onnx.Constant"() : () -> tensor<384xf32>
+    %200 = "onnx.Constant"() : () -> tensor<384xf32>
+    %201 = "onnx.Constant"() : () -> tensor<384xf32>
+    %202 = "onnx.BatchNormalizationTestMode"(%197, %198, %199, %200, %201) {epsilon = 9.99999974E-6 : f32, momentum = 0.899999976 : f32, onnx_node_name = "mobilenetv20_features_linearbottleneck8_batchnorm0_fwd", spatial = 1 : si64} : (tensor<1x384x28x28xf32>, tensor<384xf32>, tensor<384xf32>, tensor<384xf32>, tensor<384xf32>) -> tensor<1x384x28x28xf32>
+    %203 = "onnx.Relu"(%202) {onnx_node_name = "mobilenetv20_features_linearbottleneck8_relu0_fwd"} : (tensor<1x384x28x28xf32>) -> tensor<1x384x28x28xf32>
+    %204 = "onnx.Constant"() : () -> tensor<384x1x3x3xf32>
+    %205 = "onnx.Conv"(%203, %204, %cst) {auto_pad = "NOTSET", dilations = [1, 1], group = 384 : si64, kernel_shape = [3, 3], onnx_node_name = "mobilenetv20_features_linearbottleneck8_conv1_fwd", pads = [1, 1, 1, 1], strides = [1, 1]} : (tensor<1x384x28x28xf32>, tensor<384x1x3x3xf32>, none) -> tensor<1x384x28x28xf32>
+    %206 = "onnx.Constant"() : () -> tensor<384xf32>
+    %207 = "onnx.Constant"() : () -> tensor<384xf32>
+    %208 = "onnx.Constant"() : () -> tensor<384xf32>
+    %209 = "onnx.Constant"() : () -> tensor<384xf32>
+    %210 = "onnx.BatchNormalizationTestMode"(%205, %206, %207, %208, %209) {epsilon = 9.99999974E-6 : f32, momentum = 0.899999976 : f32, onnx_node_name = "mobilenetv20_features_linearbottleneck8_batchnorm1_fwd", spatial = 1 : si64} : (tensor<1x384x28x28xf32>, tensor<384xf32>, tensor<384xf32>, tensor<384xf32>, tensor<384xf32>) -> tensor<1x384x28x28xf32>
+    %211 = "onnx.Relu"(%210) {onnx_node_name = "mobilenetv20_features_linearbottleneck8_relu1_fwd"} : (tensor<1x384x28x28xf32>) -> tensor<1x384x28x28xf32>
+    %212 = "onnx.Constant"() : () -> tensor<64x384x1x1xf32>
+    %213 = "onnx.Conv"(%211, %212, %cst) {auto_pad = "NOTSET", dilations = [1, 1], group = 1 : si64, kernel_shape = [1, 1], onnx_node_name = "mobilenetv20_features_linearbottleneck8_conv2_fwd", pads = [0, 0, 0, 0], strides = [1, 1]} : (tensor<1x384x28x28xf32>, tensor<64x384x1x1xf32>, none) -> tensor<1x64x28x28xf32>
+    %214 = "onnx.Constant"() : () -> tensor<64xf32>
+    %215 = "onnx.Constant"() : () -> tensor<64xf32>
+    %216 = "onnx.Constant"() : () -> tensor<64xf32>
+    %217 = "onnx.Constant"() : () -> tensor<64xf32>
+    %218 = "onnx.BatchNormalizationTestMode"(%213, %214, %215, %216, %217) {epsilon = 9.99999974E-6 : f32, momentum = 0.899999976 : f32, onnx_node_name = "mobilenetv20_features_linearbottleneck8_batchnorm2_fwd", spatial = 1 : si64} : (tensor<1x64x28x28xf32>, tensor<64xf32>, tensor<64xf32>, tensor<64xf32>, tensor<64xf32>) -> tensor<1x64x28x28xf32>
+    %219 = "onnx.Add"(%218, %195) {onnx_node_name = "mobilenetv20_features_linearbottleneck8_elemwise_add0"} : (tensor<1x64x28x28xf32>, tensor<1x64x28x28xf32>) -> tensor<1x64x28x28xf32>
+    %220 = "onnx.Constant"() : () -> tensor<384x64x1x1xf32>
+    %221 = "onnx.Conv"(%219, %220, %cst) {auto_pad = "NOTSET", dilations = [1, 1], group = 1 : si64, kernel_shape = [1, 1], onnx_node_name = "mobilenetv20_features_linearbottleneck9_conv0_fwd", pads = [0, 0, 0, 0], strides = [1, 1]} : (tensor<1x64x28x28xf32>, tensor<384x64x1x1xf32>, none) -> tensor<1x384x28x28xf32>
+    %222 = "onnx.Constant"() : () -> tensor<384xf32>
+    %223 = "onnx.Constant"() : () -> tensor<384xf32>
+    %224 = "onnx.Constant"() : () -> tensor<384xf32>
+    %225 = "onnx.Constant"() : () -> tensor<384xf32>
+    %226 = "onnx.BatchNormalizationTestMode"(%221, %222, %223, %224, %225) {epsilon = 9.99999974E-6 : f32, momentum = 0.899999976 : f32, onnx_node_name = "mobilenetv20_features_linearbottleneck9_batchnorm0_fwd", spatial = 1 : si64} : (tensor<1x384x28x28xf32>, tensor<384xf32>, tensor<384xf32>, tensor<384xf32>, tensor<384xf32>) -> tensor<1x384x28x28xf32>
+    %227 = "onnx.Relu"(%226) {onnx_node_name = "mobilenetv20_features_linearbottleneck9_relu0_fwd"} : (tensor<1x384x28x28xf32>) -> tensor<1x384x28x28xf32>
+    %228 = "onnx.Constant"() : () -> tensor<384x1x3x3xf32>
+    %229 = "onnx.Conv"(%227, %228, %cst) {auto_pad = "NOTSET", dilations = [1, 1], group = 384 : si64, kernel_shape = [3, 3], onnx_node_name = "mobilenetv20_features_linearbottleneck9_conv1_fwd", pads = [1, 1, 1, 1], strides = [1, 1]} : (tensor<1x384x28x28xf32>, tensor<384x1x3x3xf32>, none) -> tensor<1x384x28x28xf32>
+    %230 = "onnx.Constant"() : () -> tensor<384xf32>
+    %231 = "onnx.Constant"() : () -> tensor<384xf32>
+    %232 = "onnx.Constant"() : () -> tensor<384xf32>
+    %233 = "onnx.Constant"() : () -> tensor<384xf32>
+    %234 = "onnx.BatchNormalizationTestMode"(%229, %230, %231, %232, %233) {epsilon = 9.99999974E-6 : f32, momentum = 0.899999976 : f32, onnx_node_name = "mobilenetv20_features_linearbottleneck9_batchnorm1_fwd", spatial = 1 : si64} : (tensor<1x384x28x28xf32>, tensor<384xf32>, tensor<384xf32>, tensor<384xf32>, tensor<384xf32>) -> tensor<1x384x28x28xf32>
+    %235 = "onnx.Relu"(%234) {onnx_node_name = "mobilenetv20_features_linearbottleneck9_relu1_fwd"} : (tensor<1x384x28x28xf32>) -> tensor<1x384x28x28xf32>
+    %236 = "onnx.Constant"() : () -> tensor<64x384x1x1xf32>
+    %237 = "onnx.Conv"(%235, %236, %cst) {auto_pad = "NOTSET", dilations = [1, 1], group = 1 : si64, kernel_shape = [1, 1], onnx_node_name = "mobilenetv20_features_linearbottleneck9_conv2_fwd", pads = [0, 0, 0, 0], strides = [1, 1]} : (tensor<1x384x28x28xf32>, tensor<64x384x1x1xf32>, none) -> tensor<1x64x28x28xf32>
+    %238 = "onnx.Constant"() : () -> tensor<64xf32>
+    %239 = "onnx.Constant"() : () -> tensor<64xf32>
+    %240 = "onnx.Constant"() : () -> tensor<64xf32>
+    %241 = "onnx.Constant"() : () -> tensor<64xf32>
+    %242 = "onnx.BatchNormalizationTestMode"(%237, %238, %239, %240, %241) {epsilon = 9.99999974E-6 : f32, momentum = 0.899999976 : f32, onnx_node_name = "mobilenetv20_features_linearbottleneck9_batchnorm2_fwd", spatial = 1 : si64} : (tensor<1x64x28x28xf32>, tensor<64xf32>, tensor<64xf32>, tensor<64xf32>, tensor<64xf32>) -> tensor<1x64x28x28xf32>
+    %243 = "onnx.Add"(%242, %219) {onnx_node_name = "mobilenetv20_features_linearbottleneck9_elemwise_add0"} : (tensor<1x64x28x28xf32>, tensor<1x64x28x28xf32>) -> tensor<1x64x28x28xf32>
+    %244 = "onnx.Constant"() : () -> tensor<384x64x1x1xf32>
+    %245 = "onnx.Conv"(%243, %244, %cst) {auto_pad = "NOTSET", dilations = [1, 1], group = 1 : si64, kernel_shape = [1, 1], onnx_node_name = "mobilenetv20_features_linearbottleneck10_conv0_fwd", pads = [0, 0, 0, 0], strides = [1, 1]} : (tensor<1x64x28x28xf32>, tensor<384x64x1x1xf32>, none) -> tensor<1x384x28x28xf32>
+    %246 = "onnx.Constant"() : () -> tensor<384xf32>
+    %247 = "onnx.Constant"() : () -> tensor<384xf32>
+    %248 = "onnx.Constant"() : () -> tensor<384xf32>
+    %249 = "onnx.Constant"() : () -> tensor<384xf32>
+    %250 = "onnx.BatchNormalizationTestMode"(%245, %246, %247, %248, %249) {epsilon = 9.99999974E-6 : f32, momentum = 0.899999976 : f32, onnx_node_name = "mobilenetv20_features_linearbottleneck10_batchnorm0_fwd", spatial = 1 : si64} : (tensor<1x384x28x28xf32>, tensor<384xf32>, tensor<384xf32>, tensor<384xf32>, tensor<384xf32>) -> tensor<1x384x28x28xf32>
+    %251 = "onnx.Relu"(%250) {onnx_node_name = "mobilenetv20_features_linearbottleneck10_relu0_fwd"} : (tensor<1x384x28x28xf32>) -> tensor<1x384x28x28xf32>
+    %252 = "onnx.Constant"() : () -> tensor<384x1x3x3xf32>
+    %253 = "onnx.Conv"(%251, %252, %cst) {auto_pad = "NOTSET", dilations = [1, 1], group = 384 : si64, kernel_shape = [3, 3], onnx_node_name = "mobilenetv20_features_linearbottleneck10_conv1_fwd", pads = [1, 1, 1, 1], strides = [2, 2]} : (tensor<1x384x28x28xf32>, tensor<384x1x3x3xf32>, none) -> tensor<1x384x14x14xf32>
+    %254 = "onnx.Constant"() : () -> tensor<384xf32>
+    %255 = "onnx.Constant"() : () -> tensor<384xf32>
+    %256 = "onnx.Constant"() : () -> tensor<384xf32>
+    %257 = "onnx.Constant"() : () -> tensor<384xf32>
+    %258 = "onnx.BatchNormalizationTestMode"(%253, %254, %255, %256, %257) {epsilon = 9.99999974E-6 : f32, momentum = 0.899999976 : f32, onnx_node_name = "mobilenetv20_features_linearbottleneck10_batchnorm1_fwd", spatial = 1 : si64} : (tensor<1x384x14x14xf32>, tensor<384xf32>, tensor<384xf32>, tensor<384xf32>, tensor<384xf32>) -> tensor<1x384x14x14xf32>
+    %259 = "onnx.Relu"(%258) {onnx_node_name = "mobilenetv20_features_linearbottleneck10_relu1_fwd"} : (tensor<1x384x14x14xf32>) -> tensor<1x384x14x14xf32>
+    %260 = "onnx.Constant"() : () -> tensor<96x384x1x1xf32>
+    %261 = "onnx.Conv"(%259, %260, %cst) {auto_pad = "NOTSET", dilations = [1, 1], group = 1 : si64, kernel_shape = [1, 1], onnx_node_name = "mobilenetv20_features_linearbottleneck10_conv2_fwd", pads = [0, 0, 0, 0], strides = [1, 1]} : (tensor<1x384x14x14xf32>, tensor<96x384x1x1xf32>, none) -> tensor<1x96x14x14xf32>
+    %262 = "onnx.Constant"() : () -> tensor<96xf32>
+    %263 = "onnx.Constant"() : () -> tensor<96xf32>
+    %264 = "onnx.Constant"() : () -> tensor<96xf32>
+    %265 = "onnx.Constant"() : () -> tensor<96xf32>
+    %266 = "onnx.BatchNormalizationTestMode"(%261, %262, %263, %264, %265) {epsilon = 9.99999974E-6 : f32, momentum = 0.899999976 : f32, onnx_node_name = "mobilenetv20_features_linearbottleneck10_batchnorm2_fwd", spatial = 1 : si64} : (tensor<1x96x14x14xf32>, tensor<96xf32>, tensor<96xf32>, tensor<96xf32>, tensor<96xf32>) -> tensor<1x96x14x14xf32>
+    %267 = "onnx.Constant"() : () -> tensor<576x96x1x1xf32>
+    %268 = "onnx.Conv"(%266, %267, %cst) {auto_pad = "NOTSET", dilations = [1, 1], group = 1 : si64, kernel_shape = [1, 1], onnx_node_name = "mobilenetv20_features_linearbottleneck11_conv0_fwd", pads = [0, 0, 0, 0], strides = [1, 1]} : (tensor<1x96x14x14xf32>, tensor<576x96x1x1xf32>, none) -> tensor<1x576x14x14xf32>
+    %269 = "onnx.Constant"() : () -> tensor<576xf32>
+    %270 = "onnx.Constant"() : () -> tensor<576xf32>
+    %271 = "onnx.Constant"() : () -> tensor<576xf32>
+    %272 = "onnx.Constant"() : () -> tensor<576xf32>
+    %273 = "onnx.BatchNormalizationTestMode"(%268, %269, %270, %271, %272) {epsilon = 9.99999974E-6 : f32, momentum = 0.899999976 : f32, onnx_node_name = "mobilenetv20_features_linearbottleneck11_batchnorm0_fwd", spatial = 1 : si64} : (tensor<1x576x14x14xf32>, tensor<576xf32>, tensor<576xf32>, tensor<576xf32>, tensor<576xf32>) -> tensor<1x576x14x14xf32>
+    %274 = "onnx.Relu"(%273) {onnx_node_name = "mobilenetv20_features_linearbottleneck11_relu0_fwd"} : (tensor<1x576x14x14xf32>) -> tensor<1x576x14x14xf32>
+    %275 = "onnx.Constant"() : () -> tensor<576x1x3x3xf32>
+    %276 = "onnx.Conv"(%274, %275, %cst) {auto_pad = "NOTSET", dilations = [1, 1], group = 576 : si64, kernel_shape = [3, 3], onnx_node_name = "mobilenetv20_features_linearbottleneck11_conv1_fwd", pads = [1, 1, 1, 1], strides = [1, 1]} : (tensor<1x576x14x14xf32>, tensor<576x1x3x3xf32>, none) -> tensor<1x576x14x14xf32>
+    %277 = "onnx.Constant"() : () -> tensor<576xf32>
+    %278 = "onnx.Constant"() : () -> tensor<576xf32>
+    %279 = "onnx.Constant"() : () -> tensor<576xf32>
+    %280 = "onnx.Constant"() : () -> tensor<576xf32>
+    %281 = "onnx.BatchNormalizationTestMode"(%276, %277, %278, %279, %280) {epsilon = 9.99999974E-6 : f32, momentum = 0.899999976 : f32, onnx_node_name = "mobilenetv20_features_linearbottleneck11_batchnorm1_fwd", spatial = 1 : si64} : (tensor<1x576x14x14xf32>, tensor<576xf32>, tensor<576xf32>, tensor<576xf32>, tensor<576xf32>) -> tensor<1x576x14x14xf32>
+    %282 = "onnx.Relu"(%281) {onnx_node_name = "mobilenetv20_features_linearbottleneck11_relu1_fwd"} : (tensor<1x576x14x14xf32>) -> tensor<1x576x14x14xf32>
+    %283 = "onnx.Constant"() : () -> tensor<96x576x1x1xf32>
+    %284 = "onnx.Conv"(%282, %283, %cst) {auto_pad = "NOTSET", dilations = [1, 1], group = 1 : si64, kernel_shape = [1, 1], onnx_node_name = "mobilenetv20_features_linearbottleneck11_conv2_fwd", pads = [0, 0, 0, 0], strides = [1, 1]} : (tensor<1x576x14x14xf32>, tensor<96x576x1x1xf32>, none) -> tensor<1x96x14x14xf32>
+    %285 = "onnx.Constant"() : () -> tensor<96xf32>
+    %286 = "onnx.Constant"() : () -> tensor<96xf32>
+    %287 = "onnx.Constant"() : () -> tensor<96xf32>
+    %288 = "onnx.Constant"() : () -> tensor<96xf32>
+    %289 = "onnx.BatchNormalizationTestMode"(%284, %285, %286, %287, %288) {epsilon = 9.99999974E-6 : f32, momentum = 0.899999976 : f32, onnx_node_name = "mobilenetv20_features_linearbottleneck11_batchnorm2_fwd", spatial = 1 : si64} : (tensor<1x96x14x14xf32>, tensor<96xf32>, tensor<96xf32>, tensor<96xf32>, tensor<96xf32>) -> tensor<1x96x14x14xf32>
+    %290 = "onnx.Add"(%289, %266) {onnx_node_name = "mobilenetv20_features_linearbottleneck11_elemwise_add0"} : (tensor<1x96x14x14xf32>, tensor<1x96x14x14xf32>) -> tensor<1x96x14x14xf32>
+    %291 = "onnx.Constant"() : () -> tensor<576x96x1x1xf32>
+    %292 = "onnx.Conv"(%290, %291, %cst) {auto_pad = "NOTSET", dilations = [1, 1], group = 1 : si64, kernel_shape = [1, 1], onnx_node_name = "mobilenetv20_features_linearbottleneck12_conv0_fwd", pads = [0, 0, 0, 0], strides = [1, 1]} : (tensor<1x96x14x14xf32>, tensor<576x96x1x1xf32>, none) -> tensor<1x576x14x14xf32>
+    %293 = "onnx.Constant"() : () -> tensor<576xf32>
+    %294 = "onnx.Constant"() : () -> tensor<576xf32>
+    %295 = "onnx.Constant"() : () -> tensor<576xf32>
+    %296 = "onnx.Constant"() : () -> tensor<576xf32>
+    %297 = "onnx.BatchNormalizationTestMode"(%292, %293, %294, %295, %296) {epsilon = 9.99999974E-6 : f32, momentum = 0.899999976 : f32, onnx_node_name = "mobilenetv20_features_linearbottleneck12_batchnorm0_fwd", spatial = 1 : si64} : (tensor<1x576x14x14xf32>, tensor<576xf32>, tensor<576xf32>, tensor<576xf32>, tensor<576xf32>) -> tensor<1x576x14x14xf32>
+    %298 = "onnx.Relu"(%297) {onnx_node_name = "mobilenetv20_features_linearbottleneck12_relu0_fwd"} : (tensor<1x576x14x14xf32>) -> tensor<1x576x14x14xf32>
+    %299 = "onnx.Constant"() : () -> tensor<576x1x3x3xf32>
+    %300 = "onnx.Conv"(%298, %299, %cst) {auto_pad = "NOTSET", dilations = [1, 1], group = 576 : si64, kernel_shape = [3, 3], onnx_node_name = "mobilenetv20_features_linearbottleneck12_conv1_fwd", pads = [1, 1, 1, 1], strides = [1, 1]} : (tensor<1x576x14x14xf32>, tensor<576x1x3x3xf32>, none) -> tensor<1x576x14x14xf32>
+    %301 = "onnx.Constant"() : () -> tensor<576xf32>
+    %302 = "onnx.Constant"() : () -> tensor<576xf32>
+    %303 = "onnx.Constant"() : () -> tensor<576xf32>
+    %304 = "onnx.Constant"() : () -> tensor<576xf32>
+    %305 = "onnx.BatchNormalizationTestMode"(%300, %301, %302, %303, %304) {epsilon = 9.99999974E-6 : f32, momentum = 0.899999976 : f32, onnx_node_name = "mobilenetv20_features_linearbottleneck12_batchnorm1_fwd", spatial = 1 : si64} : (tensor<1x576x14x14xf32>, tensor<576xf32>, tensor<576xf32>, tensor<576xf32>, tensor<576xf32>) -> tensor<1x576x14x14xf32>
+    %306 = "onnx.Relu"(%305) {onnx_node_name = "mobilenetv20_features_linearbottleneck12_relu1_fwd"} : (tensor<1x576x14x14xf32>) -> tensor<1x576x14x14xf32>
+    %307 = "onnx.Constant"() : () -> tensor<96x576x1x1xf32>
+    %308 = "onnx.Conv"(%306, %307, %cst) {auto_pad = "NOTSET", dilations = [1, 1], group = 1 : si64, kernel_shape = [1, 1], onnx_node_name = "mobilenetv20_features_linearbottleneck12_conv2_fwd", pads = [0, 0, 0, 0], strides = [1, 1]} : (tensor<1x576x14x14xf32>, tensor<96x576x1x1xf32>, none) -> tensor<1x96x14x14xf32>
+    %309 = "onnx.Constant"() : () -> tensor<96xf32>
+    %310 = "onnx.Constant"() : () -> tensor<96xf32>
+    %311 = "onnx.Constant"() : () -> tensor<96xf32>
+    %312 = "onnx.Constant"() : () -> tensor<96xf32>
+    %313 = "onnx.BatchNormalizationTestMode"(%308, %309, %310, %311, %312) {epsilon = 9.99999974E-6 : f32, momentum = 0.899999976 : f32, onnx_node_name = "mobilenetv20_features_linearbottleneck12_batchnorm2_fwd", spatial = 1 : si64} : (tensor<1x96x14x14xf32>, tensor<96xf32>, tensor<96xf32>, tensor<96xf32>, tensor<96xf32>) -> tensor<1x96x14x14xf32>
+    %314 = "onnx.Add"(%313, %290) {onnx_node_name = "mobilenetv20_features_linearbottleneck12_elemwise_add0"} : (tensor<1x96x14x14xf32>, tensor<1x96x14x14xf32>) -> tensor<1x96x14x14xf32>
+    %315 = "onnx.Constant"() : () -> tensor<576x96x1x1xf32>
+    %316 = "onnx.Conv"(%314, %315, %cst) {auto_pad = "NOTSET", dilations = [1, 1], group = 1 : si64, kernel_shape = [1, 1], onnx_node_name = "mobilenetv20_features_linearbottleneck13_conv0_fwd", pads = [0, 0, 0, 0], strides = [1, 1]} : (tensor<1x96x14x14xf32>, tensor<576x96x1x1xf32>, none) -> tensor<1x576x14x14xf32>
+    %317 = "onnx.Constant"() : () -> tensor<576xf32>
+    %318 = "onnx.Constant"() : () -> tensor<576xf32>
+    %319 = "onnx.Constant"() : () -> tensor<576xf32>
+    %320 = "onnx.Constant"() : () -> tensor<576xf32>
+    %321 = "onnx.BatchNormalizationTestMode"(%316, %317, %318, %319, %320) {epsilon = 9.99999974E-6 : f32, momentum = 0.899999976 : f32, onnx_node_name = "mobilenetv20_features_linearbottleneck13_batchnorm0_fwd", spatial = 1 : si64} : (tensor<1x576x14x14xf32>, tensor<576xf32>, tensor<576xf32>, tensor<576xf32>, tensor<576xf32>) -> tensor<1x576x14x14xf32>
+    %322 = "onnx.Relu"(%321) {onnx_node_name = "mobilenetv20_features_linearbottleneck13_relu0_fwd"} : (tensor<1x576x14x14xf32>) -> tensor<1x576x14x14xf32>
+    %323 = "onnx.Constant"() : () -> tensor<576x1x3x3xf32>
+    %324 = "onnx.Conv"(%322, %323, %cst) {auto_pad = "NOTSET", dilations = [1, 1], group = 576 : si64, kernel_shape = [3, 3], onnx_node_name = "mobilenetv20_features_linearbottleneck13_conv1_fwd", pads = [1, 1, 1, 1], strides = [2, 2]} : (tensor<1x576x14x14xf32>, tensor<576x1x3x3xf32>, none) -> tensor<1x576x7x7xf32>
+    %325 = "onnx.Constant"() : () -> tensor<576xf32>
+    %326 = "onnx.Constant"() : () -> tensor<576xf32>
+    %327 = "onnx.Constant"() : () -> tensor<576xf32>
+    %328 = "onnx.Constant"() : () -> tensor<576xf32>
+    %329 = "onnx.BatchNormalizationTestMode"(%324, %325, %326, %327, %328) {epsilon = 9.99999974E-6 : f32, momentum = 0.899999976 : f32, onnx_node_name = "mobilenetv20_features_linearbottleneck13_batchnorm1_fwd", spatial = 1 : si64} : (tensor<1x576x7x7xf32>, tensor<576xf32>, tensor<576xf32>, tensor<576xf32>, tensor<576xf32>) -> tensor<1x576x7x7xf32>
+    %330 = "onnx.Relu"(%329) {onnx_node_name = "mobilenetv20_features_linearbottleneck13_relu1_fwd"} : (tensor<1x576x7x7xf32>) -> tensor<1x576x7x7xf32>
+    %331 = "onnx.Constant"() : () -> tensor<160x576x1x1xf32>
+    %332 = "onnx.Conv"(%330, %331, %cst) {auto_pad = "NOTSET", dilations = [1, 1], group = 1 : si64, kernel_shape = [1, 1], onnx_node_name = "mobilenetv20_features_linearbottleneck13_conv2_fwd", pads = [0, 0, 0, 0], strides = [1, 1]} : (tensor<1x576x7x7xf32>, tensor<160x576x1x1xf32>, none) -> tensor<1x160x7x7xf32>
+    %333 = "onnx.Constant"() : () -> tensor<160xf32>
+    %334 = "onnx.Constant"() : () -> tensor<160xf32>
+    %335 = "onnx.Constant"() : () -> tensor<160xf32>
+    %336 = "onnx.Constant"() : () -> tensor<160xf32>
+    %337 = "onnx.BatchNormalizationTestMode"(%332, %333, %334, %335, %336) {epsilon = 9.99999974E-6 : f32, momentum = 0.899999976 : f32, onnx_node_name = "mobilenetv20_features_linearbottleneck13_batchnorm2_fwd", spatial = 1 : si64} : (tensor<1x160x7x7xf32>, tensor<160xf32>, tensor<160xf32>, tensor<160xf32>, tensor<160xf32>) -> tensor<1x160x7x7xf32>
+    %338 = "onnx.Constant"() : () -> tensor<960x160x1x1xf32>
+    %339 = "onnx.Conv"(%337, %338, %cst) {auto_pad = "NOTSET", dilations = [1, 1], group = 1 : si64, kernel_shape = [1, 1], onnx_node_name = "mobilenetv20_features_linearbottleneck14_conv0_fwd", pads = [0, 0, 0, 0], strides = [1, 1]} : (tensor<1x160x7x7xf32>, tensor<960x160x1x1xf32>, none) -> tensor<1x960x7x7xf32>
+    %340 = "onnx.Constant"() : () -> tensor<960xf32>
+    %341 = "onnx.Constant"() : () -> tensor<960xf32>
+    %342 = "onnx.Constant"() : () -> tensor<960xf32>
+    %343 = "onnx.Constant"() : () -> tensor<960xf32>
+    %344 = "onnx.BatchNormalizationTestMode"(%339, %340, %341, %342, %343) {epsilon = 9.99999974E-6 : f32, momentum = 0.899999976 : f32, onnx_node_name = "mobilenetv20_features_linearbottleneck14_batchnorm0_fwd", spatial = 1 : si64} : (tensor<1x960x7x7xf32>, tensor<960xf32>, tensor<960xf32>, tensor<960xf32>, tensor<960xf32>) -> tensor<1x960x7x7xf32>
+    %345 = "onnx.Relu"(%344) {onnx_node_name = "mobilenetv20_features_linearbottleneck14_relu0_fwd"} : (tensor<1x960x7x7xf32>) -> tensor<1x960x7x7xf32>
+    %346 = "onnx.Constant"() : () -> tensor<960x1x3x3xf32>
+    %347 = "onnx.Conv"(%345, %346, %cst) {auto_pad = "NOTSET", dilations = [1, 1], group = 960 : si64, kernel_shape = [3, 3], onnx_node_name = "mobilenetv20_features_linearbottleneck14_conv1_fwd", pads = [1, 1, 1, 1], strides = [1, 1]} : (tensor<1x960x7x7xf32>, tensor<960x1x3x3xf32>, none) -> tensor<1x960x7x7xf32>
+    %348 = "onnx.Constant"() : () -> tensor<960xf32>
+    %349 = "onnx.Constant"() : () -> tensor<960xf32>
+    %350 = "onnx.Constant"() : () -> tensor<960xf32>
+    %351 = "onnx.Constant"() : () -> tensor<960xf32>
+    %352 = "onnx.BatchNormalizationTestMode"(%347, %348, %349, %350, %351) {epsilon = 9.99999974E-6 : f32, momentum = 0.899999976 : f32, onnx_node_name = "mobilenetv20_features_linearbottleneck14_batchnorm1_fwd", spatial = 1 : si64} : (tensor<1x960x7x7xf32>, tensor<960xf32>, tensor<960xf32>, tensor<960xf32>, tensor<960xf32>) -> tensor<1x960x7x7xf32>
+    %353 = "onnx.Relu"(%352) {onnx_node_name = "mobilenetv20_features_linearbottleneck14_relu1_fwd"} : (tensor<1x960x7x7xf32>) -> tensor<1x960x7x7xf32>
+    %354 = "onnx.Constant"() : () -> tensor<160x960x1x1xf32>
+    %355 = "onnx.Conv"(%353, %354, %cst) {auto_pad = "NOTSET", dilations = [1, 1], group = 1 : si64, kernel_shape = [1, 1], onnx_node_name = "mobilenetv20_features_linearbottleneck14_conv2_fwd", pads = [0, 0, 0, 0], strides = [1, 1]} : (tensor<1x960x7x7xf32>, tensor<160x960x1x1xf32>, none) -> tensor<1x160x7x7xf32>
+    %356 = "onnx.Constant"() : () -> tensor<160xf32>
+    %357 = "onnx.Constant"() : () -> tensor<160xf32>
+    %358 = "onnx.Constant"() : () -> tensor<160xf32>
+    %359 = "onnx.Constant"() : () -> tensor<160xf32>
+    %360 = "onnx.BatchNormalizationTestMode"(%355, %356, %357, %358, %359) {epsilon = 9.99999974E-6 : f32, momentum = 0.899999976 : f32, onnx_node_name = "mobilenetv20_features_linearbottleneck14_batchnorm2_fwd", spatial = 1 : si64} : (tensor<1x160x7x7xf32>, tensor<160xf32>, tensor<160xf32>, tensor<160xf32>, tensor<160xf32>) -> tensor<1x160x7x7xf32>
+    %361 = "onnx.Add"(%360, %337) {onnx_node_name = "mobilenetv20_features_linearbottleneck14_elemwise_add0"} : (tensor<1x160x7x7xf32>, tensor<1x160x7x7xf32>) -> tensor<1x160x7x7xf32>
+    %362 = "onnx.Constant"() : () -> tensor<960x160x1x1xf32>
+    %363 = "onnx.Conv"(%361, %362, %cst) {auto_pad = "NOTSET", dilations = [1, 1], group = 1 : si64, kernel_shape = [1, 1], onnx_node_name = "mobilenetv20_features_linearbottleneck15_conv0_fwd", pads = [0, 0, 0, 0], strides = [1, 1]} : (tensor<1x160x7x7xf32>, tensor<960x160x1x1xf32>, none) -> tensor<1x960x7x7xf32>
+    %364 = "onnx.Constant"() : () -> tensor<960xf32>
+    %365 = "onnx.Constant"() : () -> tensor<960xf32>
+    %366 = "onnx.Constant"() : () -> tensor<960xf32>
+    %367 = "onnx.Constant"() : () -> tensor<960xf32>
+    %368 = "onnx.BatchNormalizationTestMode"(%363, %364, %365, %366, %367) {epsilon = 9.99999974E-6 : f32, momentum = 0.899999976 : f32, onnx_node_name = "mobilenetv20_features_linearbottleneck15_batchnorm0_fwd", spatial = 1 : si64} : (tensor<1x960x7x7xf32>, tensor<960xf32>, tensor<960xf32>, tensor<960xf32>, tensor<960xf32>) -> tensor<1x960x7x7xf32>
+    %369 = "onnx.Relu"(%368) {onnx_node_name = "mobilenetv20_features_linearbottleneck15_relu0_fwd"} : (tensor<1x960x7x7xf32>) -> tensor<1x960x7x7xf32>
+    %370 = "onnx.Constant"() : () -> tensor<960x1x3x3xf32>
+    %371 = "onnx.Conv"(%369, %370, %cst) {auto_pad = "NOTSET", dilations = [1, 1], group = 960 : si64, kernel_shape = [3, 3], onnx_node_name = "mobilenetv20_features_linearbottleneck15_conv1_fwd", pads = [1, 1, 1, 1], strides = [1, 1]} : (tensor<1x960x7x7xf32>, tensor<960x1x3x3xf32>, none) -> tensor<1x960x7x7xf32>
+    %372 = "onnx.Constant"() : () -> tensor<960xf32>
+    %373 = "onnx.Constant"() : () -> tensor<960xf32>
+    %374 = "onnx.Constant"() : () -> tensor<960xf32>
+    %375 = "onnx.Constant"() : () -> tensor<960xf32>
+    %376 = "onnx.BatchNormalizationTestMode"(%371, %372, %373, %374, %375) {epsilon = 9.99999974E-6 : f32, momentum = 0.899999976 : f32, onnx_node_name = "mobilenetv20_features_linearbottleneck15_batchnorm1_fwd", spatial = 1 : si64} : (tensor<1x960x7x7xf32>, tensor<960xf32>, tensor<960xf32>, tensor<960xf32>, tensor<960xf32>) -> tensor<1x960x7x7xf32>
+    %377 = "onnx.Relu"(%376) {onnx_node_name = "mobilenetv20_features_linearbottleneck15_relu1_fwd"} : (tensor<1x960x7x7xf32>) -> tensor<1x960x7x7xf32>
+    %378 = "onnx.Constant"() : () -> tensor<160x960x1x1xf32>
+    %379 = "onnx.Conv"(%377, %378, %cst) {auto_pad = "NOTSET", dilations = [1, 1], group = 1 : si64, kernel_shape = [1, 1], onnx_node_name = "mobilenetv20_features_linearbottleneck15_conv2_fwd", pads = [0, 0, 0, 0], strides = [1, 1]} : (tensor<1x960x7x7xf32>, tensor<160x960x1x1xf32>, none) -> tensor<1x160x7x7xf32>
+    %380 = "onnx.Constant"() : () -> tensor<160xf32>
+    %381 = "onnx.Constant"() : () -> tensor<160xf32>
+    %382 = "onnx.Constant"() : () -> tensor<160xf32>
+    %383 = "onnx.Constant"() : () -> tensor<160xf32>
+    %384 = "onnx.BatchNormalizationTestMode"(%379, %380, %381, %382, %383) {epsilon = 9.99999974E-6 : f32, momentum = 0.899999976 : f32, onnx_node_name = "mobilenetv20_features_linearbottleneck15_batchnorm2_fwd", spatial = 1 : si64} : (tensor<1x160x7x7xf32>, tensor<160xf32>, tensor<160xf32>, tensor<160xf32>, tensor<160xf32>) -> tensor<1x160x7x7xf32>
+    %385 = "onnx.Add"(%384, %361) {onnx_node_name = "mobilenetv20_features_linearbottleneck15_elemwise_add0"} : (tensor<1x160x7x7xf32>, tensor<1x160x7x7xf32>) -> tensor<1x160x7x7xf32>
+    %386 = "onnx.Constant"() : () -> tensor<960x160x1x1xf32>
+    %387 = "onnx.Conv"(%385, %386, %cst) {auto_pad = "NOTSET", dilations = [1, 1], group = 1 : si64, kernel_shape = [1, 1], onnx_node_name = "mobilenetv20_features_linearbottleneck16_conv0_fwd", pads = [0, 0, 0, 0], strides = [1, 1]} : (tensor<1x160x7x7xf32>, tensor<960x160x1x1xf32>, none) -> tensor<1x960x7x7xf32>
+    %388 = "onnx.Constant"() : () -> tensor<960xf32>
+    %389 = "onnx.Constant"() : () -> tensor<960xf32>
+    %390 = "onnx.Constant"() : () -> tensor<960xf32>
+    %391 = "onnx.Constant"() : () -> tensor<960xf32>
+    %392 = "onnx.BatchNormalizationTestMode"(%387, %388, %389, %390, %391) {epsilon = 9.99999974E-6 : f32, momentum = 0.899999976 : f32, onnx_node_name = "mobilenetv20_features_linearbottleneck16_batchnorm0_fwd", spatial = 1 : si64} : (tensor<1x960x7x7xf32>, tensor<960xf32>, tensor<960xf32>, tensor<960xf32>, tensor<960xf32>) -> tensor<1x960x7x7xf32>
+    %393 = "onnx.Relu"(%392) {onnx_node_name = "mobilenetv20_features_linearbottleneck16_relu0_fwd"} : (tensor<1x960x7x7xf32>) -> tensor<1x960x7x7xf32>
+    %394 = "onnx.Constant"() : () -> tensor<960x1x3x3xf32>
+    %395 = "onnx.Conv"(%393, %394, %cst) {auto_pad = "NOTSET", dilations = [1, 1], group = 960 : si64, kernel_shape = [3, 3], onnx_node_name = "mobilenetv20_features_linearbottleneck16_conv1_fwd", pads = [1, 1, 1, 1], strides = [1, 1]} : (tensor<1x960x7x7xf32>, tensor<960x1x3x3xf32>, none) -> tensor<1x960x7x7xf32>
+    %396 = "onnx.Constant"() : () -> tensor<960xf32>
+    %397 = "onnx.Constant"() : () -> tensor<960xf32>
+    %398 = "onnx.Constant"() : () -> tensor<960xf32>
+    %399 = "onnx.Constant"() : () -> tensor<960xf32>
+    %400 = "onnx.BatchNormalizationTestMode"(%395, %396, %397, %398, %399) {epsilon = 9.99999974E-6 : f32, momentum = 0.899999976 : f32, onnx_node_name = "mobilenetv20_features_linearbottleneck16_batchnorm1_fwd", spatial = 1 : si64} : (tensor<1x960x7x7xf32>, tensor<960xf32>, tensor<960xf32>, tensor<960xf32>, tensor<960xf32>) -> tensor<1x960x7x7xf32>
+    %401 = "onnx.Relu"(%400) {onnx_node_name = "mobilenetv20_features_linearbottleneck16_relu1_fwd"} : (tensor<1x960x7x7xf32>) -> tensor<1x960x7x7xf32>
+    %402 = "onnx.Constant"() : () -> tensor<320x960x1x1xf32>
+    %403 = "onnx.Conv"(%401, %402, %cst) {auto_pad = "NOTSET", dilations = [1, 1], group = 1 : si64, kernel_shape = [1, 1], onnx_node_name = "mobilenetv20_features_linearbottleneck16_conv2_fwd", pads = [0, 0, 0, 0], strides = [1, 1]} : (tensor<1x960x7x7xf32>, tensor<320x960x1x1xf32>, none) -> tensor<1x320x7x7xf32>
+    %404 = "onnx.Constant"() : () -> tensor<320xf32>
+    %405 = "onnx.Constant"() : () -> tensor<320xf32>
+    %406 = "onnx.Constant"() : () -> tensor<320xf32>
+    %407 = "onnx.Constant"() : () -> tensor<320xf32>
+    %408 = "onnx.BatchNormalizationTestMode"(%403, %404, %405, %406, %407) {epsilon = 9.99999974E-6 : f32, momentum = 0.899999976 : f32, onnx_node_name = "mobilenetv20_features_linearbottleneck16_batchnorm2_fwd", spatial = 1 : si64} : (tensor<1x320x7x7xf32>, tensor<320xf32>, tensor<320xf32>, tensor<320xf32>, tensor<320xf32>) -> tensor<1x320x7x7xf32>
+    %409 = "onnx.Constant"() : () -> tensor<1280x320x1x1xf32>
+    %410 = "onnx.Conv"(%408, %409, %cst) {auto_pad = "NOTSET", dilations = [1, 1], group = 1 : si64, kernel_shape = [1, 1], onnx_node_name = "mobilenetv20_features_conv1_fwd", pads = [0, 0, 0, 0], strides = [1, 1]} : (tensor<1x320x7x7xf32>, tensor<1280x320x1x1xf32>, none) -> tensor<1x1280x7x7xf32>
+    %411 = "onnx.Constant"() : () -> tensor<1280xf32>
+    %412 = "onnx.Constant"() : () -> tensor<1280xf32>
+    %413 = "onnx.Constant"() : () -> tensor<1280xf32>
+    %414 = "onnx.Constant"() : () -> tensor<1280xf32>
+    %415 = "onnx.BatchNormalizationTestMode"(%410, %411, %412, %413, %414) {epsilon = 9.99999974E-6 : f32, momentum = 0.899999976 : f32, onnx_node_name = "mobilenetv20_features_batchnorm1_fwd", spatial = 1 : si64} : (tensor<1x1280x7x7xf32>, tensor<1280xf32>, tensor<1280xf32>, tensor<1280xf32>, tensor<1280xf32>) -> tensor<1x1280x7x7xf32>
+    %416 = "onnx.Relu"(%415) {onnx_node_name = "mobilenetv20_features_relu1_fwd"} : (tensor<1x1280x7x7xf32>) -> tensor<1x1280x7x7xf32>
+    %417 = "onnx.GlobalAveragePool"(%416) {onnx_node_name = "mobilenetv20_features_pool0_fwd"} : (tensor<1x1280x7x7xf32>) -> tensor<1x1280x1x1xf32>
+    %418 = "onnx.Constant"() : () -> tensor<1000x1280x1x1xf32>
+    %419 = "onnx.Conv"(%417, %418, %cst) {auto_pad = "NOTSET", dilations = [1, 1], group = 1 : si64, kernel_shape = [1, 1], onnx_node_name = "mobilenetv20_output_pred_fwd", pads = [0, 0, 0, 0], strides = [1, 1]} : (tensor<1x1280x1x1xf32>, tensor<1000x1280x1x1xf32>, none) -> tensor<1x1000x1x1xf32>
+    %420 = "onnx.Constant"() : () -> tensor<2xi64>
+    %421 = "onnx.Reshape"(%419, %420) {onnx_node_name = "mobilenetv20_output_flatten0_reshape0"} : (tensor<1x1000x1x1xf32>, tensor<2xi64>) -> tensor<1x1000xf32>
+    return %421 : tensor<1x1000xf32>
+  }
+  "onnx.EntryPoint"() {func = @main_graph, numInputs = 1 : i32, numOutputs = 1 : i32} : () -> ()
+}
